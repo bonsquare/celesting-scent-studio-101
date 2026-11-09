@@ -1,7 +1,23 @@
-import {num} from './logic';
+import {calculate,num} from './logic';
 
 export const batchStatuses=['Planned','Mixing','Maceration','Maturing','Bottling','Completed','Cancelled'];
 export const materialUsage=calculation=>(calculation?.rows||[]).map(row=>({materialId:row.materialId,name:row.name,unit:row.unit,quantity:row.unit==='g'?num(row.grams):num(row.ml)}));
+export const measurementUnit=formula=>formula?.targetUnit==='g'?'g':'mL';
+export function formulaOutputVolume(formula,data,target,basis='output'){
+ if(basis==='oil')return fragranceOilVolume(formula,data,target);
+ return num(target);
+}
+export function formulaOutputAmount(formula,data,volume){
+ if(measurementUnit(formula)==='mL')return num(volume);
+ return num(calculate({...formula,nominalVolume:num(volume)},data).grams);
+}
+export function fragranceOilVolume(formula,data,target){
+ const oilPercentage=num(formula?.concentration)||((formula?.ingredients||[]).filter(row=>data?.ingredients?.find(item=>item.id===row.materialId)?.category==='Fragrance Oil').reduce((sum,row)=>sum+num(row.percentage),0));
+ if(oilPercentage<=0)return 0;
+ if(measurementUnit(formula)==='mL')return num(target)/(oilPercentage/100);
+ const totalGrams=num(target)/(oilPercentage/100);
+ return (formula?.ingredients||[]).reduce((sum,row)=>{const material=data.ingredients.find(item=>item.id===row.materialId),density=num(material?.density)||num(row.density)||1;return sum+(totalGrams*num(row.percentage)/100)/density},0);
+}
 export function inventoryShortages(ingredients,calculation){return materialUsage(calculation).map(usage=>{const material=ingredients.find(item=>item.id===usage.materialId),available=num(material?.stockQuantity);return {...usage,available,shortage:Math.max(0,usage.quantity-available)}}).filter(item=>item.shortage>1e-9)}
 export function completeBatchInventory(ingredients,batch){if(batch.inventoryDeducted)return ingredients;const usage=materialUsage(batch.calculation);return ingredients.map(material=>{const consumed=usage.filter(item=>item.materialId===material.id).reduce((sum,item)=>sum+item.quantity,0);return consumed?{...material,stockQuantity:Math.max(0,num(material.stockQuantity)-consumed)}:material})}
 const pad=value=>String(value).padStart(2,'0');
