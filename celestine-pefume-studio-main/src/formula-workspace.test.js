@@ -7,6 +7,16 @@ const data={ingredients,packaging:[],labor:[],overhead:[],additional:[],selling:
 const draft=()=>({...emptyFormulaDraft(),formulationOnly:false,name:'Reference formula',materials:[{id:'r1',materialId:'oil',role:'oil',percentage:20},{id:'r2',materialId:'fix',role:'other',percentage:1},{id:'r3',materialId:'dpg',role:'other',percentage:3},{id:'r4',materialId:'alc',role:'other',percentage:76},{id:'r5',materialId:'water',role:'other',percentage:0}]});
 
 describe('reference formulation table',()=>{
+  it('matches the shared spreadsheet for 500 mL output and 100 mL fragrance oil',()=>{
+    const sheetData={...data,ingredients:ingredients.map(item=>({...item,density:({oil:.85,fix:.95,dpg:1,alc:1,water:1})[item.id]}))};
+    for(const [targetBasis,targetAmount] of [['output',500],['oil',100]]){
+      const result=calculateFormulaDraft({...draft(),targetBasis,targetUnit:'mL',targetAmount},sheetData);
+      expect(result.errors).toEqual([]);
+      expect(result.result.rows.map(row=>row.ml)).toEqual([100,5,15,380,0]);
+      expect(result.result.rows.map(row=>row.grams)).toEqual([85,4.75,15,380,0]);
+      expect(result.result.grams).toBe(484.75);
+    }
+  });
   it('uses 120 mL fragrance oil to make 600 mL output',()=>{const result=calculateFormulaDraft({...draft(),targetBasis:'oil',targetUnit:'mL',targetAmount:120},data);expect(result.errors).toEqual([]);expect(result.percentage).toBe(100);expect(result.result.rows.map(x=>x.ml)).toEqual([120,6,18,456,0]);expect(result.totalDisplay).toBeCloseTo(600);expect(result.rowsDisplay.map(x=>x.quantity)).toEqual([120,6,18,456,0])});
   it('uses a single target output amount',()=>{const result=calculateFormulaDraft({...draft(),targetBasis:'output',targetUnit:'mL',targetAmount:500},data);expect(result.errors).toEqual([]);expect(result.result.rows.map(x=>x.ml)).toEqual([100,5,15,380,0]);expect(result.totalDisplay).toBeCloseTo(500);expect(result.formula.bottles).toBe(1)});
   it('allows a percentage-only formulation without a fragrance-oil quantity',()=>{const result=calculateFormulaDraft({...draft(),formulationOnly:true,targetBasis:'output',targetUnit:'mL',targetAmount:null},data);expect(result.errors).toEqual([]);expect(result.formula.formulationOnly).toBe(true);expect(result.formula.targetAmount).toBeNull();expect(result.result.volume).toBeCloseTo(100)});
@@ -15,6 +25,7 @@ describe('reference formulation table',()=>{
   it('uses weight percentages when the fragrance-oil target is in grams',()=>{const result=calculateFormulaDraft({...draft(),targetBasis:'oil',targetUnit:'g',targetAmount:20},data);expect(result.errors).toEqual([]);expect(result.totalDisplay).toBeCloseTo(100);expect(result.rowsDisplay.map(x=>x.quantity)).toEqual([20,1,3,76,0]);expect(result.outputMl).toBeCloseTo(120,0)});
   it('rejects percentages other than 100',()=>{const bad=draft();bad.materials[3].percentage=75;expect(calculateFormulaDraft(bad,data).errors).toContain('Ingredient percentages must total 100% (currently 99.00%).')});
   it('reopens a saved formula without changing its output',()=>{const saved=calculateFormulaDraft({...draft(),targetBasis:'oil',targetUnit:'mL',targetAmount:120},data).formula;const reopened=draftFromFormula(saved,data);expect(reopened.materials.map(x=>x.percentage)).toEqual([20,1,3,76,0]);expect(calculateFormulaDraft(reopened,data).result.volume).toBeCloseTo(calculate(saved,data).volume)});
+  it('opens an older gram-based formula as a volume-based draft without changing output',()=>{const saved=calculateFormulaDraft({...draft(),targetBasis:'oil',targetUnit:'g',targetAmount:20},data).formula;const reopened=draftFromFormula(saved,data);expect(reopened.targetUnit).toBe('mL');expect(calculateFormulaDraft(reopened,data).result.volume).toBeCloseTo(calculate(saved,data).volume)});
   it('migrates the previous proportion-based draft to direct percentages',()=>{const old={...draft(),materials:[{id:'r1',materialId:'oil',role:'oil',parts:1},{id:'r2',materialId:'alc',role:'other',parts:3},{id:'r3',materialId:'water',role:'other',parts:1}],concentration:20,targetAmount:500,targetBasis:'output',targetUnit:'mL',bottleSize:50,bottles:10};const converted=draftFromFormula(old,data);expect(converted.materials.map(x=>x.percentage)).toEqual([20,60,20]);expect(converted.targetAmount).toBe(500)});
   it('keeps a saved summary snapshot when library prices change',()=>{const calculation=calculateFormulaDraft({...draft(),targetBasis:'output',targetAmount:500},data);const snapshot=snapshotFormulaCalculation(calculation);const original=snapshot.result.productionCost;data.ingredients[0].purchasePrice=999;expect(snapshot.result.productionCost).toBe(original);data.ingredients[0].purchasePrice=200;expect(snapshot.rowsDisplay[0].quantity).toBe(100)});
 });

@@ -10,10 +10,10 @@ export function draftFromFormula(formula,data){
     const oilParts=oil.reduce((sum,row)=>sum+num(row.parts),0),otherParts=other.reduce((sum,row)=>sum+num(row.parts),0),concentration=num(formula.concentration);
     materials=formula.materials.map(row=>({...row,percentage:row.percentage!==undefined?row.percentage:row.role==='oil'?(oilParts?num(row.parts)/oilParts*concentration:0):(otherParts?num(row.parts)/otherParts*(100-concentration):0)}));
   }else materials=(formula.ingredients||[]).map(row=>({id:row.id||uid(),materialId:row.materialId||'',role:(data.ingredients||[]).find(m=>m.id===row.materialId)?.category==='Fragrance Oil'?'oil':'other',percentage:num(row.percentage)}));
-  const total=unit==='g'?current.grams:current.volume;
+  const oilPercentage=materials.filter(row=>row.role==='oil').reduce((sum,row)=>sum+num(row.percentage),0);
   const targetBasis=formula.targetBasis==='oil'?'oil':'output';
-  const targetAmount=formula.formulationOnly?null:(targetBasis==='output'&&unit==='g'?current.volume:formula.targetAmount??total);
-  return {...formula,targetUnit:unit,targetBasis,targetAmount,materials};
+  const targetAmount=formula.formulationOnly?null:targetBasis==='oil'?(unit==='g'?current.volume*oilPercentage/100:formula.targetAmount??current.volume*oilPercentage/100):(unit==='g'?current.volume:formula.targetAmount??current.volume);
+  return {...formula,targetUnit:'mL',targetBasis,targetAmount,materials};
 }
 
 export function calculateFormulaDraft(draft,data){

@@ -24,9 +24,10 @@ function Bar({label,stage}){
 export default function AgingBars({view,compact=false,parts='all'}){
   return <div className={`aging-bars${compact?' is-compact':''}`}>
     {parts!=='stages'&&<div className="ab-stage ab-overall">
-      <div className="ab-stage-head"><strong>Overall aging</strong><span>{view.overall.percent}%</span></div>
-      <div className="timeline-bar"><i style={{width:`${view.overall.percent}%`}}/></div>
-      <div className="ab-stage-meta"><small>Stage: {view.overall.stage}</small><small>Ready {formatDay(view.overall.expectedReadyDate)}</small></div>
+      <div className="ab-stage-head"><strong>Overall progress</strong><span>{view.overall.percent}% complete</span></div>
+      <div className="timeline-bar" role="progressbar" aria-label="Overall production progress" aria-valuenow={view.overall.percent} aria-valuemin={0} aria-valuemax={100}><i style={{width:`${view.overall.percent}%`}}/></div>
+      <div className="ab-stage-meta"><small>{view.overall.planned?`${view.overall.elapsed} of ${view.overall.planned} aging days`:view.overall.stage}</small><small>Ready {formatDay(view.overall.expectedReadyDate)}</small></div>
+      {view.maceration.state==='Completed'&&<div className="ab-milestone"><span aria-hidden="true">✓</span> Maceration completed{view.maceration.completedOn?` · ${formatDay(view.maceration.completedOn)}`:''}</div>}
     </div>}
     {parts!=='overall'&&<><Bar label="Maceration" stage={view.maceration}/><Bar label="Maturation" stage={view.maturation}/></>}
   </div>;

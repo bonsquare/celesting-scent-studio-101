@@ -5,7 +5,7 @@ import {snapshotPricing} from './pricing';
 import {deductSuppliesForBatch,stockDiffEntries} from './stock';
 import {completeBatchInventory,formulaOutputVolume,inventoryShortages,localDate,nextBatchNumber} from './production';
 import {nextProductionCode} from './productionCode';
-import {agingCounts,agingStatuses,agingView,applyAgingAction,applyBatchEdit,buildSchedule,historyEntries,syncProductionStatus} from './aging';
+import {agingCounts,agingStatuses,agingView,applyAgingAction,applyBatchEdit,buildSchedule,historyEntries,resumeProductionStatus,syncProductionStatus} from './aging';
 import AgingBars,{formatDay,statusClass} from './AgingBars';
 import BatchForm from './BatchForm';
 import BatchDetail from './BatchDetail';
@@ -35,8 +35,8 @@ export default function ProductionBatches({data,by='Local workspace',onChange,on
     if(!formula){onNotice('Choose a scent first.');return}
     const calc=calculate(formula,data),quantity=formula.pricingQuantity??calc.bottles,pricingSnapshot=snapshotPricing(calc.unitBottleCost,quantity,formula.pricingTiers),now=new Date();
     const schedule=buildSchedule({productionDate:input.date,macerationStart:input.macerationStart,macerationDays:input.macerationDays,maturationStart:input.maturationStart,maturationDays:input.maturationDays});
-    const productionCode=nextProductionCode(data.productions||data.batches),targetVolume=formulaOutputVolume(formula,data,input.targetAmount,input.targetBasis)||calc.volume,actualVolume=formulaOutputVolume(formula,data,input.actualYield,'output')||targetVolume,productionFormula={...formula,bottleSize:num(input.bottleSize)||formula.bottleSize,bottles:num(input.bottles)||quantity,nominalVolume:actualVolume};
-    const actualCalculation=calculate(productionFormula,data),usage=input.actualMaterialUsage?.length?input.actualMaterialUsage.map(row=>({...row,quantity:num(row.quantity)})):actualCalculation.rows.map(row=>({materialId:row.materialId,name:row.name,unit:row.unit,quantity:row.unit==='g'?num(row.grams):num(row.ml)})),base={id:uid(),code:productionCode,productionCode,legacyBatchNumber:'',batchNumber:nextBatchNumber(data.batches,input.date),formulaId:formula.id,name:formula.name,date:input.date,status:'Planned',...schedule,notes:input.notes||'',targetBasis:input.targetBasis,targetAmount:num(input.targetAmount),bottleSize:num(input.bottleSize),bottles:num(input.bottles)||quantity,expectedYield:targetVolume,actualYield:num(input.actualYield),productionCost:actualCalculation.productionCost,costPerBottle:actualCalculation.unitBottleCost,projectedGrossProfit:pricingSnapshot.tiers[0]?.result.projectedProfit??0,formula:structuredClone(formula),formulaSnapshot:structuredClone(formula),calculation:structuredClone(actualCalculation),actualMaterialUsage:usage,pricingSnapshot,inventoryDeducted:false,createdBy:by,updatedBy:by,createdAt:now.toISOString(),updatedAt:now.toISOString()};
+    const productionCode=nextProductionCode(data.productions||data.batches),targetVolume=formulaOutputVolume(formula,data,input.targetAmount,input.targetBasis,input.targetUnit)||calc.volume,actualVolume=formulaOutputVolume(formula,data,input.actualYield,'output')||targetVolume,productionFormula={...formula,bottleSize:num(input.bottleSize)||formula.bottleSize,bottles:num(input.bottles)||quantity,nominalVolume:actualVolume};
+    const actualCalculation=calculate(productionFormula,data),usage=input.actualMaterialUsage?.length?input.actualMaterialUsage.map(row=>({...row,quantity:num(row.quantity)})):actualCalculation.rows.map(row=>({materialId:row.materialId,name:row.name,unit:row.unit,quantity:row.unit==='g'?num(row.grams):num(row.ml)})),base={id:uid(),code:productionCode,productionCode,legacyBatchNumber:'',batchNumber:nextBatchNumber(data.batches,input.date),formulaId:formula.id,name:formula.name,date:input.date,status:'Planned',...schedule,notes:input.notes||'',targetBasis:input.targetBasis,targetUnit:input.targetUnit,targetAmount:num(input.targetAmount),bottleSize:num(input.bottleSize),bottles:num(input.bottles)||quantity,expectedYield:targetVolume,actualYield:num(input.actualYield),productionCost:actualCalculation.productionCost,costPerBottle:actualCalculation.unitBottleCost,projectedGrossProfit:pricingSnapshot.tiers[0]?.result.projectedProfit??0,formula:structuredClone(formula),formulaSnapshot:structuredClone(formula),calculation:structuredClone(actualCalculation),actualMaterialUsage:usage,pricingSnapshot,inventoryDeducted:false,createdBy:by,updatedBy:by,createdAt:now.toISOString(),updatedAt:now.toISOString()};
     const batch=syncProductionStatus({...base,history:[{id:`${now.getTime()}-created`,at:now.toISOString(),by,field:'created',label:'Production created',from:'—',to:base.code,reason:reason||''}]});
     onChange({...data,productions:[...(data.productions||data.batches),batch],batches:[...(data.productions||data.batches),batch]});
     onNotice(`Saved production ${batch.code}.`);setView({mode:'detail',id:batch.id});
@@ -45,15 +45,23 @@ export default function ProductionBatches({data,by='Local workspace',onChange,on
   const saveEdit=(batch,input,{reason})=>{replace(batch,applyBatchEdit(batch,input,{by,reason}));onNotice(`Saved batch ${batch.batchNumber}.`);setView({mode:'detail',id:batch.id})};
   const act=(batch,action,options)=>{replace(batch,applyAgingAction(batch,action,options));onNotice(`Updated ${batch.batchNumber}.`)};
   const status=(batch,next)=>{
+    const now=new Date(),mode=batch.statusMode||'auto';
+    if(next==='auto'){
+      const resumed=resumeProductionStatus(batch),entries=historyEntries({status:batch.status,statusMode:mode},{status:resumed.status,statusMode:'auto'},['statusMode','status'],{by,now});
+      replace(batch,{...resumed,updatedBy:by,updatedAt:now.toISOString(),history:[...(batch.history||[]),...entries]});return;
+    }
+    const manualEntries=historyEntries({status:batch.status,statusMode:mode},{status:next==='manual'?batch.status:next,statusMode:'manual'},['statusMode','status'],{by,now});
+    if(next==='manual'){
+      replace(batch,{...batch,statusMode:'manual',updatedBy:by,updatedAt:now.toISOString(),history:[...(batch.history||[]),...manualEntries]});return;
+    }
     if(next==='Completed'&&!batch.inventoryDeducted){
       const shortages=inventoryShortages(data.ingredients,batch.calculation);
       if(shortages.length){onNotice(`Cannot complete: insufficient ${shortages.map(item=>item.name).join(', ')}.`);return}
       const ingredients=completeBatchInventory(data.ingredients,batch),logged={...data,ingredients,stockLog:[...(data.stockLog||[]),...stockDiffEntries(data.ingredients,ingredients,'material','Batch',batch.batchNumber)]},used=deductSuppliesForBatch(logged,num(batch.bottles),batch.batchNumber);
-      const nextList=productions.map(item=>item.id===batch.id?{...batch,status:next,inventoryDeducted:true,updatedBy:by,updatedAt:new Date().toISOString()}:item);onChange({...used.data,productions:nextList,batches:nextList});
+      const nextList=productions.map(item=>item.id===batch.id?{...batch,status:next,statusMode:'manual',inventoryDeducted:true,updatedBy:by,updatedAt:now.toISOString(),history:[...(batch.history||[]),...manualEntries]}:item);onChange({...used.data,productions:nextList,batches:nextList});
       onNotice(used.short.length?`Batch completed. Not enough stock of: ${used.short.join(', ')}.`:'Batch completed and stock deducted.');return;
     }
-    const entries=historyEntries({status:batch.status},{status:next},['status'],{by});
-    replace(batch,{...batch,status:next,updatedBy:by,updatedAt:new Date().toISOString(),history:[...(batch.history||[]),...entries.map(item=>({...item,label:'Production status'}))]});
+    replace(batch,{...batch,status:next,statusMode:'manual',updatedBy:by,updatedAt:now.toISOString(),history:[...(batch.history||[]),...manualEntries]});
   };
   const remove=batch=>{const nextList=productions.filter(item=>item.id!==batch.id);onChange({...data,productions:nextList,batches:nextList});onNotice('Production deleted.');setView({mode:'list'})};
 
@@ -68,7 +76,7 @@ export default function ProductionBatches({data,by='Local workspace',onChange,on
       <Counter label="Total" title="Total batches" value={counts.total} tone="total" active={stage==='active'} onClick={()=>setStage('active')}/>
       <Counter label="Macerating" value={counts.macerating} tone="mac" active={stage==='Macerating'} onClick={()=>setStage(stage==='Macerating'?'active':'Macerating')}/>
       <Counter label="Maturing" value={counts.maturing} tone="mat" active={stage==='Maturing'} onClick={()=>setStage(stage==='Maturing'?'active':'Maturing')}/>
-      <Counter label="Ready" title="Ready for bottling" value={counts.ready} tone="ready" active={stage==='Ready for Bottling'} onClick={()=>setStage(stage==='Ready for Bottling'?'active':'Ready for Bottling')}/>
+      <Counter label="Ready" title="Ready for distribution" value={counts.ready} tone="ready" active={stage==='Ready for Distribution'} onClick={()=>setStage(stage==='Ready for Distribution'?'active':'Ready for Distribution')}/>
       <Counter label="On hold" value={counts.onHold} tone="hold" active={stage==='On Hold'} onClick={()=>setStage(stage==='On Hold'?'active':'On Hold')}/>
     </div>
     {!data.formulas.length&&<p className="empty">Create a formula in the Formula Library first, then create production from it.</p>}
@@ -79,10 +87,15 @@ export default function ProductionBatches({data,by='Local workspace',onChange,on
     </div>}
     <p className="bc-sep">Batch list{shown.length?` (${shown.length})`:''}</p>{shown.length?<div className="production-list">{shown.map(({batch,aging})=>{const isOpen=open.has(batch.id);return <article className={`production-record bc-row${isOpen?' is-open':''}`} key={batch.id}>
       <button type="button" className="bc-summary" aria-expanded={isOpen} onClick={()=>toggle(batch.id)}>
-        <span className="bc-summary-top"><strong>{batch.name}</strong><span className={`aging-pill ${statusClass(aging.status)}`}>{aging.status}</span><ChevronDown size={16} className="bc-chevron" aria-hidden="true"/></span>
+        <span className="bc-summary-top"><strong>{batch.name}</strong><span className={`aging-pill ${statusClass(aging.status)}`}>{aging.status}</span>{batch.statusMode==='manual'&&<small className="bc-manual-tag">Manual</small>}<ChevronDown size={16} className="bc-chevron" aria-hidden="true"/></span>
         <AgingBars view={aging} compact parts="overall"/>
       </button>
-      {isOpen&&<><div className="bc-meta"><span>Batch ID <b>{batch.batchNumber}</b></span><span>Produced {formatDay(batch.date)} · {num(batch.actualYield)} ml</span></div>
+      {isOpen&&<><div className="bc-key-facts">
+        <div><small>Batch ID</small><strong>{batch.batchNumber}</strong></div>
+        <div><small>Batch volume</small><strong>{num(batch.expectedYield??batch.actualYield).toFixed(2)} mL</strong></div>
+        <div><small>Production date</small><strong>{formatDay(batch.date)}</strong></div>
+        <div><small>Ready for distribution</small><strong>{formatDay(aging.overall.expectedReadyDate)}</strong></div>
+      </div>
       <AgingBars view={aging} compact parts="stages"/></>}
       {isOpen&&<div className="bc-actions">
         <button type="button" className="btn" onClick={()=>setView({mode:'detail',id:batch.id})}><Eye size={14}/> View</button>

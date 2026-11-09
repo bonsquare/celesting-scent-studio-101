@@ -19,6 +19,7 @@ const actionsFor=(batch,view)=>{
 
 export default function BatchDetail({batch,by,focusUpdate,onBack,onEdit,onAction,onStatus,onDelete}){
   const view=agingView(batch);
+  const manualStatus=batch.statusMode==='manual'||['Completed','Cancelled'].includes(batch.status);
   const actions=actionsFor(batch,view);
   const [action,setAction]=useState(actions[0].id),[date,setDate]=useState(localDate()),[reason,setReason]=useState(''),[deleting,setDeleting]=useState(false);
   useEffect(()=>{if(focusUpdate)document.getElementById('batch-update')?.scrollIntoView({block:'center'})},[focusUpdate]);
@@ -40,7 +41,7 @@ export default function BatchDetail({batch,by,focusUpdate,onBack,onEdit,onAction
     {batch.notes&&<p className="bd-notes">{batch.notes}</p>}
     <AgingBars view={view}/>
     <div className="bd-actions"><button type="button" className="btn" onClick={()=>onEdit(batch)}><Pencil size={14}/> Edit schedule</button></div>
-    <div className={`bd-update${focusUpdate?' is-focus':''}`} id="batch-update"><h3>Update batch</h3>
+    <div className={`bd-update${focusUpdate?' is-focus':''}`} id="batch-update"><h3>Update batch</h3><p className="bd-section-help">Record a stage change or pause the batch.</p>
       <div className="bf-grid">
         <label className="bf-wide"><span>Action</span><select value={chosen.id} onChange={event=>setAction(event.target.value)}>{actions.map(item=><option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
         {chosen.date&&<label><span>Completion date</span><input type="date" value={date} onChange={event=>setDate(event.target.value)}/></label>}
@@ -48,8 +49,9 @@ export default function BatchDetail({batch,by,focusUpdate,onBack,onEdit,onAction
       </div>
       <button type="button" className="btn primary" disabled={Boolean(invalid)} onClick={apply}>Apply update</button>
     </div>
-    <div className="bd-production"><h3>Production status</h3>
-      <div className="bd-status-row"><select className={`batch-status status-${(batch.status||'Planned').toLowerCase()}`} value={batch.status||'Planned'} onChange={event=>onStatus(batch,event.target.value)}>{batchStatuses.map(status=><option key={status}>{status}</option>)}</select><small>{batch.inventoryDeducted?'Inventory deducted':'Setting Completed deducts raw materials and supplies from inventory.'}</small></div>
+    <div className="bd-production"><h3>Production status</h3><p className="bd-section-help">Follow the aging dates automatically, or choose a status for a rush order.</p>
+      <div className="bd-status-mode" role="group" aria-label="Status update mode"><button type="button" className={!manualStatus?'active':''} disabled={Boolean(batch.inventoryDeducted)||batch.status==='Cancelled'} onClick={()=>onStatus(batch,'auto')}>Automatic</button><button type="button" className={manualStatus?'active':''} onClick={()=>onStatus(batch,'manual')}>Manual</button></div>
+      <div className="bd-status-row">{manualStatus?<select className={`batch-status status-${(batch.status||'Planned').toLowerCase().replaceAll(' ','-')}`} aria-label="Manual production status" value={batch.status||'Planned'} onChange={event=>onStatus(batch,event.target.value)}>{batchStatuses.map(status=><option key={status}>{status}</option>)}</select>:<strong className="bd-auto-status">{batch.status||'Planned'}</strong>}<small>{batch.inventoryDeducted?'Inventory deducted.':manualStatus?'Manual override remains until you switch back to Automatic.':'Status follows maceration and maturation dates.'} {!batch.inventoryDeducted&&'Completed deducts raw materials and supplies.'}</small></div>
     </div>
     <div className="bd-history"><h3>Change history</h3>
       {history.length?<ul>{history.map(item=><li key={item.id+item.at}><div><strong>{item.label}</strong><span>{item.from} → {item.to}</span></div><small>{stamp(item.at)} · {item.by}{item.reason?` · ${item.reason}`:''}</small></li>)}</ul>:<p className="empty">No changes recorded yet.</p>}
