@@ -1294,7 +1294,7 @@ button.banner-chip:focus-visible{outline:2px solid #fff;outline-offset:2px}
 #root .cs-step::before{content:"";position:absolute;top:14px;right:50%;width:100%;height:2px;background:var(--t-tint);z-index:0}
 #root .cs-step:first-child::before{display:none}
 #root .cs-step.cs-done::before,#root .cs-step.cs-active::before{background:var(--t-brand)}
-#root .cs-step.cs-history::before{background:repeating-linear-gradient(90deg,var(--t-line) 0 4px,transparent 4px 8px)}
+#root .cs-step.cs-history:not(.cs-done)::before{background:repeating-linear-gradient(90deg,var(--t-line) 0 4px,transparent 4px 8px)}
 #root .cs-dot{position:relative;z-index:1;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--t-card);border:2px solid var(--t-line);color:var(--t-muted);font-size:12px;font-weight:800}
 #root .cs-active .cs-dot{background:var(--t-brand);border-color:var(--t-brand);color:#fff;box-shadow:0 0 0 4px var(--t-tint)}
 #root .cs-done .cs-dot{background:#2fb673;border-color:#2fb673;color:#fff}
@@ -1449,3 +1449,51 @@ button.banner-chip:focus-visible{outline:2px solid #fff;outline-offset:2px}
 #root .bc-key-facts>div:last-child strong{color:#5146a7}
 @media(min-width:760px){#root .bc-key-facts{grid-template-columns:repeat(4,minmax(0,1fr))}}
 #root .ab-milestone{justify-self:start;margin-top:.2rem;padding:.22rem .5rem;border-radius:6px;background:#e5f7ed;color:#176b4d;font-size:.68rem;font-weight:750}
+.costing-setup.card.costing-setup .costing-current{flex-wrap:wrap}
+.costing-setup.card.costing-setup .costing-current-main{flex:1;min-width:180px}
+.costing-production-details{flex-basis:100%;display:flex;align-items:center;gap:.75rem;padding-top:.5rem;border-top:1px solid var(--t-line)}
+.costing-setup.card.costing-setup .costing-production-status{flex:none;padding:.3rem .55rem;border-radius:99px;background:#e8f6ef;color:#16745e;font-size:.63rem;font-weight:800}
+.costing-production-details dl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.55rem;flex:1;margin:0}
+.costing-production-details dl>div{min-width:0;padding-left:.6rem;border-left:1px solid var(--t-line)}
+.costing-production-details dt{font-size:.6rem;color:var(--t-muted)}
+.costing-production-details dd{margin:.1rem 0 0;font-size:.68rem;font-weight:800;color:var(--t-ink2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:700px){.costing-production-details{align-items:flex-start;flex-direction:column;gap:.45rem}.costing-production-details dl{width:100%;grid-template-columns:repeat(2,minmax(0,1fr));row-gap:.45rem}}
+#root .bottling-pricing.card .bottling-math{grid-template-columns:repeat(4,minmax(0,1fr));align-items:stretch;gap:.5rem}
+#root .bottling-math>div{justify-content:center;min-height:64px}
+#root .bottling-math>div.bottling-math-total{background:#eaf8f1;border-color:#bfe6d1}
+#root .bottling-math>div.bottling-math-total strong{font-size:1.02rem}
+#root .bottling-math>div.bottling-math-production{background:#156f58;border-color:#156f58;box-shadow:0 4px 12px #156f5824}
+#root .bottling-math>div.bottling-math-production span{color:#d7f5e9}
+#root .bottling-math>div.bottling-math-production strong{color:#fff;font-size:1.18rem}
+#root .bottling-math>div.bottling-math-income{background:#f1edff;border-color:#dcd2ff}
+#root .bottling-math>div.bottling-math-income strong{color:#5145a7;font-size:1.02rem}
+#root .bottling-math>div.bottling-math-income small{display:block;font-size:.55rem;line-height:1.25}
+.bottling-cost-breakdown{margin:-.35rem 16px .8rem;padding:0 .15rem;color:var(--t-muted);font-size:.62rem}
+@media(max-width:700px){#root .bottling-pricing.card .bottling-math{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Pricing tiers: selling price and profit lead, percentages support them. */
+#root .pricing-tier-head,#root .pricing-tier summary{grid-template-columns:minmax(110px,1.4fr) minmax(84px,1.15fr) minmax(84px,1.1fr) minmax(60px,.7fr) minmax(60px,.7fr);gap:.5rem}
+#root .pricing-tier-head{padding:.4rem .8rem;font-size:.61rem;font-weight:750}
+#root .pricing-tier summary{padding:.75rem .8rem;min-height:55px}
+#root .pricing-tier summary strong{font-size:.76rem}
+#root .pricing-tier summary>span[data-label="Price"]{font-size:.86rem;font-weight:850;color:var(--t-brand)}
+#root .pricing-tier summary>span[data-label="Profit"]{font-size:.8rem;font-weight:800;color:#08745f}
+#root .pricing-tier summary>span[data-label="Markup"],#root .pricing-tier summary>span[data-label="Margin"]{font-size:.66rem;color:var(--t-muted)}
+#root .pricing-tier:first-of-type{background:#f7f5ff;border-color:#dcd4ff;border-left-color:#8678ed}
+@media(max-width:560px){#root .pricing-tier summary{grid-template-columns:repeat(2,minmax(0,1fr));gap:.55rem .75rem}#root .pricing-tier summary strong{grid-column:1/-1}#root .pricing-tier summary>span[data-label]{justify-self:stretch;text-align:left}#root .pricing-tier summary>span[data-label="Price"],#root .pricing-tier summary>span[data-label="Profit"]{font-size:.88rem}}
+
+.bc-stage-process{padding:.45rem .75rem .7rem;border-top:1px solid var(--t-line)}
+.bc-stage-process>strong{display:block;margin-bottom:.4rem;color:var(--t-ink2);font-size:.7rem}
+#root .production-stage-steps.costing-steps{grid-template-columns:repeat(6,minmax(0,1fr));padding:.55rem .35rem .45rem;margin:0}
+#root .production-stage-steps .cs-step{cursor:default}
+#root .production-stage-steps .cs-label{font-size:.58rem;line-height:1.15;text-align:center}
+
+/* Tier editor sections */
+#root .pricing-tier-editor{display:grid;grid-template-columns:1fr;gap:.55rem;padding:.7rem;background:#f9f8ff}
+#root .pricing-tier-editor-group{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.55rem .7rem;padding:.7rem;border:1px solid var(--t-line);border-radius:11px;background:#fff}
+#root .pricing-tier-editor-group h4{grid-column:1/-1;margin:0 0 .1rem;color:var(--t-brand);font-size:.68rem;font-weight:800}
+#root .pricing-tier-editor-group.price-settings{grid-template-columns:repeat(4,minmax(0,1fr))}
+#root .pricing-tier-editor-group.safety-settings{background:#f7f5ff}
+#root .pricing-tier-editor-group .below-cost-override{grid-column:1/-1;display:flex;align-items:center;gap:.45rem;margin-top:.15rem}
+@media(max-width:760px){#root .pricing-tier-editor-group.price-settings{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:420px){#root .pricing-tier-editor-group{grid-template-columns:1fr}#root .pricing-tier-editor-group.price-settings{grid-template-columns:repeat(2,minmax(0,1fr))}}

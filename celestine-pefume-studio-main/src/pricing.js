@@ -1,7 +1,11 @@
 import {num,uid} from './logic';
 
-export const pricingTierNames=['Retail','Wholesale','Reseller','Promotional'];
-export const defaultPricingTiers=()=>pricingTierNames.map((name,index)=>({id:uid(),name,method:'markup',rate:[100,50,40,25][index],rounding:index===0?'peso':'none',manualPrice:'',discountType:'percent',discount:0,maxDiscount:30,minMargin:0}));
+export const pricingTierNames=['Retail','Reseller','Whole Seller','Promotional'];
+export const defaultPricingTiers=()=>pricingTierNames.map((name,index)=>({id:uid(),name,method:index===0?'markup':'discount',rate:index===0?100:[0,15,25,35][index],rounding:'peso',manualPrice:'',discountType:'percent',discount:0,maxDiscount:30,minMargin:[40,30,25,20][index]}));
+export const orderedPricingTiers=tiers=>(tiers?.length?tiers:defaultPricingTiers()).map(tier=>({...tier,name:tier.name==='Wholesale'?'Whole Seller':tier.name})).sort((a,b)=>{
+ const rank=name=>{const index=pricingTierNames.indexOf(name);return index<0?pricingTierNames.length:index};
+ return rank(a.name)-rank(b.name);
+});
 
 const finite=value=>Number.isFinite(value)?value:0;
 export const roundPrice=(price,mode)=>{const value=Math.max(0,finite(price));if(mode==='peso')return Math.ceil(value);if(mode==='5')return Math.ceil(value/5)*5;if(mode==='10')return Math.ceil(value/10)*10;if(mode==='ending9'){const rounded=Math.ceil(value);const candidate=Math.ceil((rounded+1)/10)*10-1;return candidate<value?candidate+10:candidate}return value};
@@ -37,7 +41,7 @@ export function calculatePriceTier(cost,quantity,tier,context={}){
 // Tiers are calculated in order. The first tier is Retail; later tiers may be a % below Retail.
 // Safety net: each tier should be priced below the one before it, so a warning is added when it is not.
 export function calculatePricingTiers(cost,quantity,tiers){
- const list=tiers?.length?tiers:defaultPricingTiers(),results=[];
+ const list=orderedPricingTiers(tiers),results=[];
  list.forEach((tier,index)=>{
   const result=calculatePriceTier(cost,quantity,tier,{retailPrice:results[0]?.finalPrice});
   if(index>0&&result.finalPrice>0&&results[index-1].finalPrice>0&&result.finalPrice>=results[index-1].finalPrice-1e-9)result.warnings.push(`${tier.name||'This tier'} should be priced below ${list[index-1].name||'the tier above it'}.`);
@@ -60,7 +64,7 @@ export const collapsePriceHistory=formula=>(formula?.pricingHistory?.length>1?{.
 export const structureDiscounts=[0,15,25,35];
 export const structureFloors=[40,30,25,20];
 export function recommendedTiers(tiers,retailPrice){
- const list=tiers?.length?tiers:defaultPricingTiers();
+ const list=orderedPricingTiers(tiers);
  return list.map((tier,index)=>{
   const slot=Math.min(index,structureDiscounts.length-1);
   return index===0

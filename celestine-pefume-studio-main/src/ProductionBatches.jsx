@@ -1,5 +1,5 @@
 import {useMemo,useState} from 'react';
-import {Archive,ChevronDown,Eye,Pencil,Plus,RefreshCw,Search} from 'lucide-react';
+import {Archive,Check,ChevronDown,Eye,Pencil,Plus,RefreshCw,Search} from 'lucide-react';
 import {calculate,num,uid} from './logic';
 import {snapshotPricing} from './pricing';
 import {deductSuppliesForBatch,stockDiffEntries} from './stock';
@@ -12,8 +12,20 @@ import BatchDetail from './BatchDetail';
 
 const Counter=({label,title,value,tone,active,onClick})=><button type="button" title={title||label} aria-pressed={active} className={`bc-counter bc-${tone}${active?' is-active':''}`} onClick={onClick}><strong>{value}</strong><span>{label}</span></button>;
 
-export default function ProductionBatches({data,by='Local workspace',onChange,onNotice}){
-  const [view,setView]=useState({mode:'list'}),[query,setQuery]=useState(''),[scent,setScent]=useState('all'),[stage,setStage]=useState('active');
+const ProductionStageSteps=({aging})=>{
+  const steps=[
+    ['Batch Planning',true,false],
+    ['Materials',true,false],
+    ['Aging & Review',true,false],
+    ['Maceration',aging.maceration.state==='Completed',aging.status==='Macerating'],
+    ['Matured',aging.maturation.state==='Completed',aging.status==='Maturing'],
+    ['Ready',aging.status==='Ready for Distribution',false]
+  ];
+  return <div className="bc-stage-process"><strong>Production process stages</strong><div className="production-stage-steps costing-steps" role="list" aria-label="Production process stages">{steps.map(([label,done,active],index)=><div className={`cs-step ${done?'cs-done':active?'cs-active':'cs-todo'}`} role="listitem" key={label}><span className="cs-dot">{done?<Check size={14} strokeWidth={3}/>:index+1}</span><span className="cs-label">{label}</span></div>)}</div></div>;
+};
+
+export default function ProductionBatches({data,by='Local workspace',onChange,onNotice,initialView}){
+  const [view,setView]=useState(()=>initialView?.id&&data.batches.some(batch=>batch.id===initialView.id)?initialView:{mode:'list'}),[query,setQuery]=useState(''),[scent,setScent]=useState('all'),[stage,setStage]=useState('active');
   const [open,setOpen]=useState(()=>new Set());
   const productions=data.productions||data.batches||[];
   const toggle=id=>setOpen(current=>{const next=new Set(current);if(next.has(id))next.delete(id);else next.add(id);return next});
@@ -96,6 +108,7 @@ export default function ProductionBatches({data,by='Local workspace',onChange,on
         <div><small>Production date</small><strong>{formatDay(batch.date)}</strong></div>
         <div><small>Ready for distribution</small><strong>{formatDay(aging.overall.expectedReadyDate)}</strong></div>
       </div>
+      <ProductionStageSteps aging={aging}/>
       <AgingBars view={aging} compact parts="stages"/></>}
       {isOpen&&<div className="bc-actions">
         <button type="button" className="btn" onClick={()=>setView({mode:'detail',id:batch.id})}><Eye size={14}/> View</button>
