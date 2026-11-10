@@ -19,8 +19,9 @@ export default function CloudPinGate({children}){
   const events=['pointerdown','keydown','scroll','touchstart'];
   events.forEach(event=>window.addEventListener(event,activity,{passive:true}));
   document.addEventListener('visibilitychange',check);
+  window.addEventListener('studio-lock',lock);
   const timer=setInterval(check,1000);
-  return()=>{active=false;clearInterval(timer);events.forEach(event=>window.removeEventListener(event,activity));document.removeEventListener('visibilitychange',check)};
+  return()=>{active=false;clearInterval(timer);events.forEach(event=>window.removeEventListener(event,activity));document.removeEventListener('visibilitychange',check);window.removeEventListener('studio-lock',lock)};
  },[state]);
  if(state==='unlocked')return children;
  if(state==='loading')return <div className="loading" role="status"><img className="loading-logo" src="/celestine-logo.jpg" alt="Celestine & Co." width="84" height="84"/><span>Refreshing your workspace…</span></div>;

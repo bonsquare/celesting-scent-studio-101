@@ -15,7 +15,7 @@ function FormulaDetails({formula,data,referenceVolume}){
   const ingredient=row=><div className="bf-formula-ingredient" key={row.id}><span>{row.material?.name||row.name||'Material'}</span><strong>{num(row.percentage).toFixed(2)}%</strong></div>;
   return <div className="bf-wide bf-formula-details" aria-label="Selected formula details">
     <div className="bf-formula-details-head"><div><small>SELECTED FORMULA</small><strong>{formula.name}</strong>{inspiredBy&&<span className="bf-formula-inspired">Inspired by {inspiredBy}</span>}</div>{formula.code&&<span>{formula.code}</span>}</div>
-    <div className="bf-formula-facts"><div><strong>{num(referenceVolume).toFixed(2)} <em>mL</em></strong><span>Reference output</span></div><div><strong>{oilPercentage.toFixed(2)}<em>%</em></strong><span>Fragrance oil</span></div><div><strong>{rows.length}</strong><span>Materials</span></div></div>
+    <div className="bf-formula-facts"><div><strong>{num(referenceVolume).toFixed(2)} <em>mL</em></strong><span>Formula reference (not batch size)</span></div><div><strong>{oilPercentage.toFixed(2)}<em>%</em></strong><span>Fragrance oil</span></div><div><strong>{rows.length}</strong><span>Materials</span></div></div>
     <details className="bf-formula-ingredient-toggle"><summary>View ingredients <span>{rows.length}</span></summary><div className="bf-formula-ingredient-groups"><section><h4>Fragrance oil</h4>{oil.map(ingredient)}</section><section><h4>Other raw materials</h4>{other.map(ingredient)}</section></div></details>
   </div>;
 }
