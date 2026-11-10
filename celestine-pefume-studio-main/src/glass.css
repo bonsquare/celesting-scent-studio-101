@@ -201,19 +201,6 @@ body{background:radial-gradient(circle at 4% 8%,color-mix(in srgb,var(--t-brand)
   #root .dashboard-metrics{grid-template-columns:1fr}
 }
 
-/* Warm perfume palette: the saved formula view is the visual anchor. */
-#root .formula-summary-banner{
-  background:linear-gradient(120deg,#173b68 0%,#275789 42%,#f1a82e 100%);
-  border:1px solid #ffffff3d;
-  box-shadow:0 18px 38px #173b6838,inset 0 1px #ffffff70;
-}
-#root .formula-summary-banner .formula-summary-name{border-bottom-color:#ffd27a;text-shadow:0 2px 10px #102b4c55}
-#root .formula-summary-banner .formula-summary-concentration{background:#ffffff20;border-color:#ffffff65}
-#root .formula-summary-highlights>div:first-child{background:linear-gradient(135deg,#e8f8f1,#d6f1e8);border-color:#bfe5d5}
-#root .formula-summary-highlights>div+div{background:linear-gradient(135deg,#fff3db,#ffe4bc);border-color:#f3d09a}
-#root .formula-summary-ingredient{background:linear-gradient(135deg,#fffaf0,#fff1d9);border-color:#f2d6a8}
-#root .formula-summary-track i{background:linear-gradient(90deg,#e58b1f,#ffd36f)}
-#root .formula-summary-track i.oil{background:linear-gradient(90deg,#d86b68,#f5a06c)}
 
 /* Keep the enhanced visual language consistent when any theme is selected. */
 /* Formula summaries use the selected palette throughout, including dark themes. */
