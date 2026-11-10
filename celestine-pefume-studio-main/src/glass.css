@@ -1,4 +1,6 @@
 /* Shared glass surfaces adapt to every palette in themes.css. */
+#root .account-lock{display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
+@media(max-width:520px){#root .account-lock span{display:none}#root .account-lock{min-width:40px;padding:8px}}
 html body #root .pricing-history-card{cursor:pointer;overflow:visible}
 html body #root .pricing-history-card .saved-price-summary{display:block!important;grid-column:1/-1;min-width:0;max-width:100%;overflow:visible}
 #root .saved-price-open{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:4px 0;border:0;background:none;color:var(--t-ink2);font:inherit;font-weight:800;text-align:left;cursor:pointer}
