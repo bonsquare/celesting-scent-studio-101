@@ -13,16 +13,16 @@ export default function CloudPinGate({children}){
  useEffect(()=>{
   if(state!=='unlocked')return;
   let last=Date.now(),key=null,active=true;
-  unlockKey().then(value=>{if(active)key=value});
+  unlockKey().then(value=>{if(active){key=value;try{const saved=Number(sessionStorage.getItem(key)||0);if(saved>0)last=saved}catch{}}});
   const lock=()=>{if(key)try{sessionStorage.removeItem(key)}catch{}setDigits(['','','','']);setState('enter_pin');setError('Locked after 5 minutes of inactivity. Enter your PIN to continue.');};
   const activity=()=>{if(Date.now()-last>=idleLimit){lock();return}last=Date.now();if(key)try{sessionStorage.setItem(key,String(last))}catch{}};
   const check=()=>{if(Date.now()-last>=idleLimit)lock()};
   const events=['pointerdown','keydown','scroll','touchstart'];
-  events.forEach(event=>window.addEventListener(event,activity,{passive:true}));
+  events.forEach(event=>window.addEventListener(event,activity,{passive:true,capture:true}));
   document.addEventListener('visibilitychange',check);
   window.addEventListener('studio-lock',lock);
   const timer=setInterval(check,1000);
-  return()=>{active=false;clearInterval(timer);events.forEach(event=>window.removeEventListener(event,activity));document.removeEventListener('visibilitychange',check);window.removeEventListener('studio-lock',lock)};
+  return()=>{active=false;clearInterval(timer);events.forEach(event=>window.removeEventListener(event,activity,true));document.removeEventListener('visibilitychange',check);window.removeEventListener('studio-lock',lock)};
  },[state]);
  if(state==='unlocked')return children;
  if(state==='loading')return <div className="loading" role="status"><img className="loading-logo" src="/celestine-logo.jpg" alt="Celestine & Co." width="84" height="84"/><span>Refreshing your workspace…</span></div>;
