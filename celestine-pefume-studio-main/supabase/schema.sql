@@ -15,7 +15,7 @@ create or replace function public.handle_new_user()
 returns trigger language plpgsql security definer set search_path = public as $$
 begin
   insert into public.profiles (user_id, email, approved, status, role)
-  values (new.id, lower(coalesce(new.email, '')), lower(coalesce(new.email, '')) = 'bonie.office@gmail.com', case when lower(coalesce(new.email, '')) = 'bonie.office@gmail.com' then 'approved' else 'pending' end, case when lower(coalesce(new.email, '')) = 'bonie.office@gmail.com' then 'master' else 'user' end)
+  values (new.id, lower(coalesce(new.email, '')), lower(coalesce(new.email, '')) in ('bonie.office@gmail.com','orong.rms@gmail.com'), case when lower(coalesce(new.email, '')) in ('bonie.office@gmail.com','orong.rms@gmail.com') then 'approved' else 'pending' end, case when lower(coalesce(new.email, '')) in ('bonie.office@gmail.com','orong.rms@gmail.com') then 'master' else 'user' end)
   on conflict (user_id) do update set email = excluded.email;
   return new;
 end;
@@ -26,17 +26,17 @@ create trigger on_auth_user_created after insert or update of email on auth.user
 for each row execute procedure public.handle_new_user();
 
 insert into public.profiles (user_id, email, approved, status, role)
-select id, lower(coalesce(email, '')), lower(coalesce(email, '')) = 'bonie.office@gmail.com', case when lower(coalesce(email, '')) = 'bonie.office@gmail.com' then 'approved' else 'pending' end, case when lower(coalesce(email, '')) = 'bonie.office@gmail.com' then 'master' else 'user' end from auth.users
+select id, lower(coalesce(email, '')), lower(coalesce(email, '')) in ('bonie.office@gmail.com','orong.rms@gmail.com'), case when lower(coalesce(email, '')) in ('bonie.office@gmail.com','orong.rms@gmail.com') then 'approved' else 'pending' end, case when lower(coalesce(email, '')) in ('bonie.office@gmail.com','orong.rms@gmail.com') then 'master' else 'user' end from auth.users
 on conflict (user_id) do update set email = excluded.email, approved = case when excluded.role = 'master' then true else public.profiles.approved end, status = case when excluded.role = 'master' then 'approved' else public.profiles.status end, role = case when excluded.role = 'master' then 'master' else public.profiles.role end;
 
 alter table public.profiles enable row level security;
 drop policy if exists "Users can view their profile" on public.profiles;
 create policy "Users can view their profile" on public.profiles for select to authenticated
-using (auth.uid() = user_id or lower(coalesce(auth.jwt() ->> 'email', '')) = 'bonie.office@gmail.com');
+using (auth.uid() = user_id or lower(coalesce(auth.jwt() ->> 'email', '')) in ('bonie.office@gmail.com','orong.rms@gmail.com'));
 drop policy if exists "Master can update approvals" on public.profiles;
 create policy "Master can update approvals" on public.profiles for update to authenticated
-using (lower(coalesce(auth.jwt() ->> 'email', '')) = 'bonie.office@gmail.com')
-with check (lower(coalesce(auth.jwt() ->> 'email', '')) = 'bonie.office@gmail.com');
+using (lower(coalesce(auth.jwt() ->> 'email', '')) in ('bonie.office@gmail.com','orong.rms@gmail.com'))
+with check (lower(coalesce(auth.jwt() ->> 'email', '')) in ('bonie.office@gmail.com','orong.rms@gmail.com'));
 
 create table if not exists public.app_state (
   user_id uuid primary key references auth.users(id) on delete cascade,

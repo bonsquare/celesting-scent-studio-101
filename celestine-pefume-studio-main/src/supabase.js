@@ -3,6 +3,7 @@ import {createClient} from '@supabase/supabase-js';
 const url=import.meta.env.VITE_SUPABASE_URL?.trim();
 const anonKey=import.meta.env.VITE_SUPABASE_ANON_KEY?.trim();
 export const MASTER_EMAIL='bonie.office@gmail.com';
+export const MASTER_EMAILS=[MASTER_EMAIL,'orong.rms@gmail.com'];
 
 export const supabaseConfigured=Boolean(url&&anonKey);
 export const supabase=supabaseConfigured?createClient(url,anonKey,{
@@ -23,7 +24,7 @@ export async function signOut(){
 
 export async function getAccessProfile(user){
  if(!user)return null;
- if(user.email?.toLowerCase()===MASTER_EMAIL)return {user_id:user.id,email:user.email,approved:true,status:'approved',role:'master'};
+ if(MASTER_EMAILS.includes(user.email?.toLowerCase()))return {user_id:user.id,email:user.email,approved:true,status:'approved',role:'master'};
  const {data,error}=await supabase.from('profiles').select('user_id,email,approved,status,role').eq('user_id',user.id).maybeSingle();
  if(error)throw error;
  return data||{user_id:user.id,email:user.email,approved:false,status:'pending',role:'user'};

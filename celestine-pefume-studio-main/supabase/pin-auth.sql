@@ -52,14 +52,14 @@ $$;
 create or replace function public.master_pin_requests()
 returns table(user_id uuid,email text) language plpgsql security definer set search_path=public as $$
 begin
- if lower(coalesce(auth.jwt()->>'email',''))<>'bonie.office@gmail.com' then raise exception 'Master only'; end if;
+ if lower(coalesce(auth.jwt()->>'email',''))not in ('bonie.office@gmail.com','orong.rms@gmail.com') then raise exception 'Master only'; end if;
  return query select p.user_id,p.email from public.profiles p join public.pin_credentials c on c.user_id=p.user_id where c.reset_requested;
 end;
 $$;
 create or replace function public.approve_pin_reset(target_user uuid)
 returns void language plpgsql security definer set search_path=public,extensions as $$
 begin
- if lower(coalesce(auth.jwt()->>'email',''))<>'bonie.office@gmail.com' then raise exception 'Master only'; end if;
+ if lower(coalesce(auth.jwt()->>'email',''))not in ('bonie.office@gmail.com','orong.rms@gmail.com') then raise exception 'Master only'; end if;
  update public.pin_credentials set pin_hash=crypt('0000',gen_salt('bf')),attempts=0,locked=false,reset_requested=false,must_change=true,verified_session=null where user_id=target_user and reset_requested;
  if not found then raise exception 'No pending PIN reset request'; end if;
 end;
