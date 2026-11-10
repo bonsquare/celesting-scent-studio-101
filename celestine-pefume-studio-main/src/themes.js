@@ -17,16 +17,16 @@ export const themeKey='celestine-theme';
 export const defaultTheme='pastel';
 export const isTheme=id=>themes.some(theme=>theme.id===id);
 
-export function readStoredTheme(){try{const id=localStorage.getItem(themeKey);return isTheme(id)?id:defaultTheme}catch{return defaultTheme}}
+export function readStoredTheme(userId){try{const id=localStorage.getItem(userId?`${themeKey}:${userId}`:themeKey);return isTheme(id)?id:defaultTheme}catch{return defaultTheme}}
 
 // Sets the theme on the page right away and remembers it on this device.
-export function applyTheme(id){
+export function applyTheme(id,userId){
   const theme=themes.find(item=>item.id===id)||themes[0];
   document.documentElement.dataset.theme=theme.id;
   document.documentElement.dataset.appearance=theme.dark?'dark':'light';
   document.documentElement.style.colorScheme=theme.dark?'dark':'light';
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content',theme.bar);
-  try{localStorage.setItem(themeKey,theme.id)}catch{/* remembering is optional */}
+  try{localStorage.setItem(userId?`${themeKey}:${userId}`:themeKey,theme.id)}catch{/* remembering is optional */}
 }
 
 // Show this device's last theme straight away, before the app has loaded its data.

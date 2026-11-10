@@ -50,10 +50,10 @@ function App({user,isMaster=false}){const[data,setData]=useState(null),[page,set
  useEffect(()=>{try{if(selected)localStorage.setItem(selectedFormulaKey,selected)}catch{}},[selected]);
  // An app shortcut opens /?page=Costing. Tidy the address bar once the page is chosen.
  useEffect(()=>{const url=new URL(location.href);url.searchParams.set('page',page);history.replaceState(null,'',url)},[page]);
- // The color theme: your saved choice (synced with your data) wins; this device's last choice shows until data loads.
- const theme=isTheme(data?.settings?.theme)?data.settings.theme:readStoredTheme()||defaultTheme;
- useEffect(()=>{applyTheme(theme)},[theme]);
- const chooseTheme=id=>{applyTheme(id);setData(current=>({...current,settings:{...current.settings,theme:id}}))};
+ // Personal appearance is isolated from shared workspace data.
+ const [theme,setTheme]=useState(()=>readStoredTheme(user?.id)||defaultTheme);
+ useEffect(()=>{applyTheme(theme,user?.id)},[theme,user?.id]);
+ const chooseTheme=id=>{if(isTheme(id)){applyTheme(id,user?.id);setTheme(id)}};
  // Maceration and maturation are marked done on their own when their dates arrive, and the batch status moves forward.
  const loaded=Boolean(data);
  useEffect(()=>{if(!loaded)return;const run=()=>setData(d=>{const next=syncProductionStatuses(d.productions||d.batches||[]);return next===(d.productions||d.batches)?d:{...d,productions:next,batches:next}});run();const timer=setInterval(run,60000);return()=>clearInterval(timer)},[loaded]);
