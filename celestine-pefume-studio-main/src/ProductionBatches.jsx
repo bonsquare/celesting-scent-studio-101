@@ -1,3 +1,4 @@
+import WorkspaceDialog from './WorkspaceDialog';
 import {useEffect,useMemo,useState} from 'react';
 import {Archive,Check,ChevronDown,Eye,Pencil,Plus,RefreshCw,Search} from 'lucide-react';
 import {calculate,num,uid} from './logic';
@@ -79,9 +80,9 @@ export default function ProductionBatches({data,by='Local workspace',onChange,on
   };
   const remove=batch=>{const nextList=productions.filter(item=>item.id!==batch.id);onChange({...data,productions:nextList,batches:nextList});onNotice('Production deleted.');setView({mode:'list'})};
 
-  if(view.mode==='new')return <BatchForm data={data} onSave={create} onCancel={()=>setView({mode:'list'})}/>;
+  if(view.mode==='new')return <WorkspaceDialog title="Create production" onClose={()=>setView({mode:'list'})}><BatchForm data={data} onSave={create} onCancel={()=>setView({mode:'list'})}/></WorkspaceDialog>;
   const current=view.id&&data.batches.find(item=>item.id===view.id);
-  if(view.mode==='edit'&&current)return <BatchForm data={data} batch={current} onSave={(input,options)=>saveEdit(current,input,options)} onCancel={()=>setView({mode:'detail',id:current.id})}/>;
+  if(view.mode==='edit'&&current)return <WorkspaceDialog title="Edit production" onClose={()=>setView({mode:'detail',id:current.id})}><BatchForm data={data} batch={current} onSave={(input,options)=>saveEdit(current,input,options)} onCancel={()=>setView({mode:'detail',id:current.id})}/></WorkspaceDialog>;
   if(view.mode==='detail'&&current)return <BatchDetail key={current.id} batch={current} by={by} focusUpdate={view.focus==='update'} onBack={()=>setView({mode:'list'})} onEdit={()=>setView({mode:'edit',id:current.id})} onAction={act} onStatus={status} onDelete={remove}/>;
 
   return <section className="card production-batches">
