@@ -1,4 +1,5 @@
 /* Shared glass surfaces adapt to every palette in themes.css. */
+html body #root .batch-form .bf-actions{position:relative!important;bottom:auto!important;z-index:auto;margin-top:16px;padding:12px 0;clear:both}
 /* Separate the primary and destructive formula actions. */
 html body #root .formula-window .formula-view-actions{width:100%;justify-content:space-between;gap:24px;justify-self:stretch;box-sizing:border-box}
 html body #root .formula-window .formula-view-actions .btn{flex:0 0 auto!important}

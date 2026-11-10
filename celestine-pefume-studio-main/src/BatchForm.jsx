@@ -125,6 +125,8 @@ export default function BatchForm({data,batch,onSave,onCancel}){
     {needsReason&&<label className="bf-wide bf-reason"><span>Reason for changing the schedule or yield (required)</span><input value={reason} placeholder="For example: needs a longer maceration" onChange={event=>setReason(event.target.value)}/></label>}
     {problems.length>0&&<ul className="bf-problems">{problems.map(problem=><li key={problem}>{problem}</li>)}</ul>}
     </>}
+    {step===0&&(!formula||targetVolume<=0)&&<p className="warning" role="status">{!formula?'Choose a formula to continue.':'Enter a batch amount greater than zero to continue.'}</p>}
+    {step===2&&needsReason&&!reason.trim()&&<p className="warning" role="status">Enter a reason for the changes before saving.</p>}
     <div className="bf-actions"><button type="button" className="btn" onClick={step===0?onCancel:()=>setStep(step-1)}>{step===0?'Cancel':'Back'}</button>{step<2?<button type="button" className="btn primary" disabled={step===0&&(!formula||targetVolume<=0)} onClick={()=>setStep(step+1)}>Next <ArrowRight size={15}/></button>:<button type="button" className="btn primary" disabled={blocked} onClick={()=>onSave({...input,formulaId:f.formulaId},{reason:reason.trim(),override})}>{editing?'Save changes':'Save production'}</button>}</div>
   </section>;
 }
