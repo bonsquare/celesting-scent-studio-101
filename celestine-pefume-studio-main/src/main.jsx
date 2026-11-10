@@ -1,4 +1,5 @@
 import CloudPinGate from './CloudPinGate';
+import './viewport';
 import CloudPinRequests from './CloudPinRequests';
 import {useEffect,useMemo,useState} from 'react';
 import{createRoot}from'react-dom/client';

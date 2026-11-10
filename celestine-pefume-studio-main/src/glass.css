@@ -1,4 +1,14 @@
 /* Shared glass surfaces adapt to every palette in themes.css. */
+html body #root .material-dialog-backdrop{z-index:100;backdrop-filter:none;-webkit-backdrop-filter:none}
+@media(max-width:767px){
+ html body #root .material-dialog-backdrop{top:var(--visible-top,0px);bottom:auto;height:var(--visible-height,100dvh)}
+ html body #root .material-dialog{height:100%;max-height:100%;border-radius:0}
+ html body #root .material-dialog-header{flex-shrink:0}
+ html body #root .material-dialog-form{flex:1;min-height:0;scroll-padding-bottom:100px}
+ html body #root .material-dialog-actions{position:sticky;bottom:-1.1rem;z-index:5;background:var(--t-card);border-top:1px solid var(--t-line);padding:.75rem 0 calc(.75rem + env(safe-area-inset-bottom));margin-top:.75rem}
+ html body #root .material-dialog-actions .btn{min-height:44px}
+ html.keyboard-open #root .bottom-nav,html:has(.material-dialog-backdrop) #root .bottom-nav{display:none!important}
+}
 /* Raw material records and entry forms prioritize opaque, readable surfaces. */
 html body #root :is(.raw-library,.raw-library .material-group,.raw-library .material-record,.material-dialog,.material-dialog-header,.material-dialog-form){background:var(--t-card)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;color:var(--t-ink);isolation:isolate}
 html body #root :is(.raw-library,.material-dialog)::before,html body #root :is(.raw-library,.material-dialog)::after{display:none!important}
