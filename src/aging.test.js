@@ -1,5 +1,5 @@
 ﻿import {describe,expect,it} from 'vitest';
-import {agingCounts,agingView,applyAgingAction,applyBatchEdit,buildSchedule,scheduleChanged,scheduleOf,stageProgress,syncProductionStatus,syncProductionStatuses,validateBatch} from './aging';
+import {agingCounts,agingView,applyAgingAction,applyBatchEdit,buildSchedule,resumeProductionStatus,scheduleChanged,scheduleOf,stageProgress,syncProductionStatus,syncProductionStatuses,validateBatch} from './aging';
 
 const sched=buildSchedule({productionDate:'2026-11-01',macerationDays:14,maturationDays:30});
 const batch=(extra={})=>({id:'a',batchNumber:'B-1',name:'Dream Mist',date:'2026-11-01',status:'Planned',actualYield:500,...sched,...extra});
@@ -41,13 +41,13 @@ describe('progress is calculated from the date',()=>{
     expect(stageProgress('2026-11-01','2026-11-15','','2026-11-15')).toMatchObject({state:'Completed',percent:100});
     expect(stageProgress('2026-11-01','2026-11-15','','2027-03-01').percent).toBe(100);
   });
-  it('moves Scheduled to Macerating to Maturing to Ready for Bottling by date alone',()=>{
+  it('moves Scheduled to Macerating to Maturing to Ready for Distribution by date alone',()=>{
     const b=batch();
     expect(agingView(b,'2026-10-31').status).toBe('Scheduled');
     expect(agingView(b,'2026-11-05').status).toBe('Macerating');
     expect(agingView(b,'2026-11-15').status).toBe('Maturing');
     expect(agingView(b,'2026-12-15').status).toBe('Maturing');
-    expect(agingView(b,'2026-12-16').status).toBe('Ready for Bottling');
+    expect(agingView(b,'2026-12-16').status).toBe('Ready for Distribution');
   });
   it('overall progress covers both stages',()=>{
     const view=agingView(batch(),'2026-11-23');// 22 of 45 days
@@ -104,8 +104,11 @@ describe('counters and production status',()=>{
     expect(syncProductionStatus(batch({status:'Maturing'}),'2026-11-05').status).toBe('Maturing');
     expect(syncProductionStatus(batch({status:'Planned'}),'2026-10-30').status).toBe('Planned');
     expect(syncProductionStatus(batch(),'2026-11-16').status).toBe('Maturing');
-    expect(syncProductionStatus(batch(),'2026-12-16').status).toBe('Bottling');
-    expect(syncProductionStatus(batch({status:'Bottling'}),'2026-11-16').status).toBe('Bottling');
+    expect(syncProductionStatus(batch(),'2026-12-16').status).toBe('Ready for Distribution');
+    expect(syncProductionStatus(batch({status:'Bottling'}),'2026-11-16').status).toBe('Ready for Distribution');
+    expect(syncProductionStatus(batch({status:'Ready for Distribution',statusMode:'manual'}),'2026-11-05').status).toBe('Ready for Distribution');
+    expect(agingView(batch({status:'Ready for Distribution',statusMode:'manual'}),'2026-11-05').status).toBe('Ready for Distribution');
+    expect(resumeProductionStatus(batch({status:'Ready for Distribution',statusMode:'manual'}),'2026-11-05')).toMatchObject({status:'Maceration',statusMode:'auto'});
     expect(syncProductionStatus(batch({status:'Completed'}),'2026-12-16').status).toBe('Completed');
     expect(syncProductionStatus(batch({onHold:true}),'2026-12-16').status).toBe('Planned');
     const list=[batch()];expect(syncProductionStatuses(list,'2026-10-30')).toBe(list);expect(syncProductionStatuses(list,'2026-11-05')).not.toBe(list);

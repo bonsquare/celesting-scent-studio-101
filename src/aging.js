@@ -2,7 +2,7 @@ import {num} from './logic';
 import {addDays,daysBetween,localDate} from './production';
 
 // Aging statuses are worked out from dates and recorded completion events. On Hold and Archived are explicit overrides.
-export const agingStatuses=['Scheduled','Macerating','Maturing','On Hold','Ready for Bottling','Archived'];
+export const agingStatuses=['Scheduled','Macerating','Maturing','On Hold','Ready for Distribution','Archived'];
 const finished=batch=>['Completed','Cancelled'].includes(batch.status||'Planned');
 
 // Every batch has its own schedule. Older batches only stored end dates, so durations are worked out from them.
@@ -62,21 +62,27 @@ export function agingView(batch,today=localDate()){
   let status='Macerating';
   if(batch.archived)status='Archived';
   else if(batch.onHold)status='On Hold';
-  else if(matDone)status='Ready for Bottling';
+  else if(batch.statusMode==='manual'&&!finished(batch))status=({Planned:'Scheduled',Mixing:'Macerating',Maceration:'Macerating',Maturing:'Maturing',Bottling:'Ready for Distribution','Ready for Distribution':'Ready for Distribution'})[batch.status]||status;
+  else if(matDone)status='Ready for Distribution';
   else if(macDone)status='Maturing';
   else if(maceration.state==='Scheduled')status='Scheduled';
   const first=s.macerationStart,last=s.maturationDate,total=first&&last?Math.max(1,daysBetween(first,last)):0;
   const percent=matDone?100:total?Math.round(clamp(daysBetween(first,today)/total*100)):0;
   const planned=first&&last?daysBetween(first,last):0;
-  return {status,schedule:s,maceration,maturation,overall:{percent,planned,stage:status,expectedReadyDate:s.expectedReadyDate}};
+  return {status,schedule:s,maceration,maturation,overall:{percent,planned,elapsed:total?(matDone?planned:Math.min(planned,Math.max(0,daysBetween(first,today)))):0,stage:status,expectedReadyDate:s.expectedReadyDate}};
 }
 
-// The production status you already use (Mixing, Maturing, Bottling, Completed) follows the aging schedule forward, never backward.
-const rank={Planned:0,Mixing:1,Maceration:2,Maturing:3,Bottling:4};
+// Automatic production status follows the aging schedule forward; manual rush overrides stay put.
+const rank={Planned:0,Mixing:1,Maceration:2,Maturing:3,'Ready for Distribution':4};
 export function syncProductionStatus(batch,today=localDate()){
-  if(finished(batch)||batch.archived||batch.onHold||!(batch.status in rank))return batch;
-  const {status}=agingView(batch,today),target=status==='Ready for Bottling'?'Bottling':status==='Maturing'?'Maturing':status==='Macerating'?'Maceration':null;
+  if(batch.status==='Bottling')return {...batch,status:'Ready for Distribution'};
+  if(finished(batch)||batch.archived||batch.onHold||batch.statusMode==='manual'||!(batch.status in rank))return batch;
+  const {status}=agingView(batch,today),target=status==='Ready for Distribution'?'Ready for Distribution':status==='Maturing'?'Maturing':status==='Macerating'?'Maceration':null;
   return target&&rank[batch.status]<rank[target]?{...batch,status:target}:batch;
+}
+export function resumeProductionStatus(batch,today=localDate()){
+  if(finished(batch)||batch.inventoryDeducted)return batch;
+  return syncProductionStatus({...batch,statusMode:'auto',status:'Planned'},today);
 }
 export function syncProductionStatuses(batches,today=localDate()){
   let changed=false;
@@ -94,14 +100,14 @@ export function agingCounts(batches,today=localDate()){
     if(finished(batch))continue;
     if(status==='Macerating')counts.macerating+=1;
     else if(status==='Maturing')counts.maturing+=1;
-    else if(status==='Ready for Bottling')counts.ready+=1;
+    else if(status==='Ready for Distribution')counts.ready+=1;
     else if(status==='On Hold')counts.onHold+=1;
   }
   return counts;
 }
 
 // ---- Change history. Each entry keeps the previous value, the new value, who changed it, when, and why. ----
-const fieldLabels={actualYield:'Actual yield (ml)',date:'Production date',macerationStart:'Maceration start',macerationDays:'Maceration duration (days)',macerationDate:'Maceration end',maturationStart:'Maturation start',maturationDays:'Maturation duration (days)',maturationDate:'Maturation end',expectedReadyDate:'Expected ready date',macerationDoneOn:'Maceration completed on',maturationDoneOn:'Maturation completed on',onHold:'On hold',archived:'Archived',notes:'Notes'};
+const fieldLabels={status:'Production status',statusMode:'Status mode',actualYield:'Actual yield (ml)',date:'Production date',macerationStart:'Maceration start',macerationDays:'Maceration duration (days)',macerationDate:'Maceration end',maturationStart:'Maturation start',maturationDays:'Maturation duration (days)',maturationDate:'Maturation end',expectedReadyDate:'Expected ready date',macerationDoneOn:'Maceration completed on',maturationDoneOn:'Maturation completed on',onHold:'On hold',archived:'Archived',notes:'Notes'};
 const shown=value=>value===undefined||value===null||value===''?'—':value===true?'Yes':value===false?'No':String(value);
 export function historyEntries(before,after,fields,{by,reason,now=new Date()}){
   return fields.filter(field=>shown(before[field])!==shown(after[field])).map(field=>({id:`${now.getTime()}-${field}`,at:now.toISOString(),by,field,label:fieldLabels[field]||field,from:shown(before[field]),to:shown(after[field]),reason:reason||''}));
@@ -132,7 +138,7 @@ export function applyAgingAction(batch,action,{date=localDate(),reason='',by='Lo
 // Saving the form: only the batch with this ID changes. Every changed schedule value is written to its history.
 export function applyBatchEdit(batch,input,{by='Local workspace',reason='',now=new Date()}={}){
   const sched=buildSchedule({productionDate:input.date,macerationStart:input.macerationStart,macerationDays:input.macerationDays,maturationStart:input.maturationStart,maturationDays:input.maturationDays});
-  const next={...batch,date:input.date,actualYield:num(input.actualYield),notes:input.notes||'',...sched,updatedBy:by,updatedAt:now.toISOString()};
+  const next={...batch,date:input.date,targetBasis:input.targetBasis||batch.targetBasis||'output',targetUnit:input.targetUnit||batch.targetUnit,targetAmount:num(input.targetAmount??batch.targetAmount),bottleSize:num(input.bottleSize??batch.bottleSize),bottles:num(input.bottles??batch.bottles),actualYield:num(input.actualYield),actualMaterialUsage:input.actualMaterialUsage||batch.actualMaterialUsage||[],notes:input.notes||'',...sched,updatedBy:by,updatedAt:now.toISOString()};
   const entries=historyEntries(batch,next,[...scheduleFields,'notes'],{by,reason,now});
   return syncProductionStatus({...next,history:[...(batch.history||[]),...entries]});
 }

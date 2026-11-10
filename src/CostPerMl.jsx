@@ -4,12 +4,12 @@ import {money,rateMoney,uid,num} from './logic';
 const quantity=value=>new Intl.NumberFormat('en-PH',{maximumFractionDigits:2}).format(value);
 const contentRate=value=>new Intl.NumberFormat('en-PH',{style:'currency',currency:'PHP',minimumFractionDigits:2,maximumFractionDigits:4}).format(value);
 
-export default function CostPerMl({calc,form,onUpdate,onEdit}){
+export default function CostPerMl({calc,form,onUpdate,onEditProduction}){
  const expenses=[['Labor','costingLabor',calc.laborCost],['Overhead','costingOverhead',calc.overheadCost]];
  const custom=form.operatingExpenses??(calc.additionalCost>0?[{id:'additional',name:'Additional expense',amount:form.costingAdditional??calc.additionalCost}]:[]);
  const updateCustom=items=>onUpdate({operatingExpenses:items,costingAdditional:items.reduce((sum,item)=>sum+num(item.amount),0)});
  return <section className="card cost-sheet" aria-label="Cost per milliliter breakdown">
-  <header className="cost-sheet-header"><div><p className="eyebrow">STEP 1 · COSTS</p><h2>Cost of the perfume</h2><p>Raw materials plus labor, overhead and other costs for the whole {quantity(calc.volume)} ML batch</p></div><button className="btn" onClick={onEdit}>Edit formula</button></header>
+  <header className="cost-sheet-header"><div><p className="eyebrow">STEP 1 · COSTS</p><h2>Cost of the perfume</h2><p>Raw materials plus labor, overhead and other costs for the whole {quantity(calc.volume)} ML batch</p></div><button type="button" className="btn" onClick={onEditProduction}>Edit production</button></header>
   <div className="cost-sheet-section-title"><h3>Raw materials</h3><span>{calc.rows.length} {calc.rows.length===1?'ingredient':'ingredients'}</span></div>
   <div className="cost-sheet-materials">{calc.rows.map((row,index)=><div className="cost-sheet-material" key={row.id}><span className="cost-sheet-number">{index+1}</span><div className="cost-sheet-material-main"><strong>{row.name}</strong><small>{quantity(row.ml)} ML · {quantity(row.grams)} GRAMS</small></div><div className="cost-sheet-material-price"><strong>{money(row.cost)}</strong><small>{rateMoney(row.unitCost)} / {row.unit}</small></div></div>)}</div>
   <div className="cost-sheet-subtotal"><span>Raw materials subtotal</span><strong>{money(calc.ingredientCost)}</strong></div>

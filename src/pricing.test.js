@@ -12,6 +12,6 @@ describe('pricing calculations',()=>{
  it('supports different bottle costs',()=>expect(calculatePriceTier(170,1,tier({})).finalPrice).toBeCloseTo(221));
  it('updates when production cost changes',()=>expect(calculatePriceTier(90,1,tier({})).finalPrice).not.toBe(calculatePriceTier(85,1,tier({})).finalPrice));
  it('preserves historical snapshots',()=>{const tiers=[tier({name:'Retail'})],snap=snapshotPricing(85,10,tiers);tiers[0].rate=90;expect(snap.tiers[0].result.finalPrice).toBeCloseTo(110.5)});
- it('calculates retail wholesale and reseller tiers',()=>{const results=calculatePricingTiers(100,2,[tier({name:'Retail',rate:100}),tier({name:'Wholesale',rate:50}),tier({name:'Reseller',rate:30})]);expect(results.map(x=>x.result.finalPrice)).toEqual([200,150,130])});
+ it('reorders legacy tiers and flags prices out of sequence',()=>{const results=calculatePricingTiers(100,2,[tier({name:'Retail',rate:100}),tier({name:'Wholesale',rate:50}),tier({name:'Reseller',rate:30})]);expect(results.map(x=>x.name)).toEqual(['Retail','Reseller','Whole Seller']);expect(results.map(x=>x.result.finalPrice)).toEqual([200,130,150]);expect(results[2].result.warnings.join(' ')).toMatch(/below Reseller/)});
  it('supports all rounding options',()=>{expect(roundPrice(121.01,'peso')).toBe(122);expect(roundPrice(121.01,'5')).toBe(125);expect(roundPrice(121.01,'10')).toBe(130);expect(roundPrice(121.01,'ending9')).toBe(129)});
 });

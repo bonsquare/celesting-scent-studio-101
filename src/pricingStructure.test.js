@@ -4,6 +4,15 @@ import {calculatePriceTier,calculatePricingTiers,defaultPricingTiers,recommended
 const COST=103.93487450462351;
 const tier=patch=>({name:'T',method:'markup',rate:30,rounding:'none',manualPrice:'',manualOverride:'',discountType:'percent',discount:0,maxDiscount:30,minMargin:0,...patch});
 
+it('starts new pricing with editable Retail, Reseller, Whole Seller, and Promotional rates',()=>{
+  const defaults=defaultPricingTiers();
+  expect(defaults.map(item=>[item.name,item.method,item.rate,item.minMargin])).toEqual([
+    ['Retail','markup',100,40],['Reseller','discount',15,30],['Whole Seller','discount',25,25],['Promotional','discount',35,20]
+  ]);
+  const changed=defaults.map(item=>item.name==='Reseller'?{...item,rate:10}:item);
+  expect(calculatePricingTiers(100,1,changed)[1].result.finalPrice).toBe(180);
+});
+
 describe('discount-from-Retail method',()=>{
   it('prices a tier a set percentage below Retail',()=>{
     expect(calculatePriceTier(COST,1,tier({method:'discount',rate:15}),{retailPrice:200}).finalPrice).toBeCloseTo(170,6);
@@ -50,7 +59,7 @@ describe('recommended structure with a Retail price of 200',()=>{
 describe('safety nets',()=>{
   it('warns when a tier is not priced below the one above it',()=>{
     const results=calculatePricingTiers(COST,1,[tier({name:'Retail',method:'manual',manualPrice:'150'}),tier({name:'Wholesale',method:'manual',manualPrice:'160'})]);
-    expect(results[1].result.warnings.join(' ')).toMatch(/Wholesale should be priced below Retail/);
+    expect(results[1].result.warnings.join(' ')).toMatch(/Whole Seller should be priced below Retail/);
   });
   it('does not warn when tiers are in order',()=>{
     const results=calculatePricingTiers(COST,1,[tier({name:'Retail',rate:100}),tier({name:'Wholesale',rate:50})]);

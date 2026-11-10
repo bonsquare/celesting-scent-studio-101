@@ -1,0 +1,101 @@
+/* Shared glass surfaces adapt to every palette in themes.css. */
+:root{
+  --glass-panel:color-mix(in srgb,var(--t-card) 54%,transparent);
+  --glass-raised:color-mix(in srgb,var(--t-card) 68%,transparent);
+  --glass-soft:color-mix(in srgb,var(--t-soft) 48%,transparent);
+  --glass-input:color-mix(in srgb,var(--t-card) 90%,transparent);
+  --glass-line:color-mix(in srgb,var(--t-line2) 38%,white 62%);
+  --glass-edge:#ffffffb8;
+  --glass-sheen:linear-gradient(145deg,#ffffff6b 0%,#ffffff17 38%,transparent 70%);
+  --glass-shadow:0 18px 46px #25265624,0 4px 12px #25265612,inset 0 1px #ffffffca,inset 0 -1px #ffffff5c;
+  --glass-ambient:#84dbc0;
+}
+html:is([data-theme="steel"],[data-theme="dusk"],[data-theme="aurora"],[data-theme="plum"],[data-theme="violet"],[data-theme="night"]){
+  --glass-panel:color-mix(in srgb,var(--t-card) 68%,transparent);
+  --glass-raised:color-mix(in srgb,var(--t-card) 76%,transparent);
+  --glass-soft:color-mix(in srgb,var(--t-soft) 62%,transparent);
+  --glass-input:color-mix(in srgb,var(--t-card) 93%,transparent);
+  --glass-line:color-mix(in srgb,var(--t-line2) 84%,transparent);
+  --glass-edge:#ffffff36;
+  --glass-sheen:linear-gradient(145deg,#ffffff2b 0%,#ffffff0a 38%,transparent 70%);
+  --glass-shadow:0 20px 48px #02061555,0 3px 12px #02061530,inset 0 1px #ffffff38,inset 0 -1px #ffffff12;
+  --glass-ambient:var(--t-brand2);
+}
+
+body{background:radial-gradient(circle at 4% 8%,color-mix(in srgb,var(--t-brand) 38%,transparent),transparent 30rem),radial-gradient(circle at 96% 24%,color-mix(in srgb,var(--t-brand2) 38%,transparent),transparent 32rem),radial-gradient(circle at 50% 88%,color-mix(in srgb,var(--glass-ambient) 33%,transparent),transparent 36rem),var(--t-page) fixed!important}
+#root .shell,#root .workspace{background:transparent!important}
+
+/* Main panes */
+#root .card,#root .cost-card,#root .kpis .stat,#root .dashboard-metric,
+#root .production-record,#root .formula-window,#root .material-dialog,
+#root .sheet{
+  background:var(--glass-sheen),var(--glass-panel);
+  border:1px solid var(--glass-line);
+  box-shadow:var(--glass-shadow);
+  backdrop-filter:blur(30px) saturate(165%);
+  -webkit-backdrop-filter:blur(30px) saturate(165%);
+}
+#root .card,#root .cost-card,#root .production-record{border-radius:22px}
+
+/* Smaller surfaces keep their color meaning while letting the page show through. */
+#root .costing-current,#root .costing-steps,#root .bf-steps,
+#root .bf-group,#root .pricing-tier,#root .pricing-tier-editor-group,
+#root .bc-key-facts>div,#root .formula-step,#root .formula-result,
+#root .costing-material-row,#root .costing-history-preview>button,
+#root .inventory-card,#root .material-card,#root .theme-card,
+#root .saved-formula,#root .pricing-history-card,#root .formula-summary-section,
+#root .profile-picture-editor{
+  background:var(--glass-soft);
+  border-color:var(--glass-line);
+  box-shadow:inset 0 1px var(--glass-edge),0 8px 20px #1d244b10;
+  backdrop-filter:blur(20px) saturate(145%);
+  -webkit-backdrop-filter:blur(20px) saturate(145%);
+}
+#root .pricing-tier[open],#root .pricing-tier-editor-group{background:var(--glass-raised)}
+#root .pricing-tier:first-of-type{background:color-mix(in srgb,var(--t-tint) 69%,transparent)}
+#root .formula-library-hero{background:linear-gradient(120deg,color-mix(in srgb,var(--t-tint) 60%,transparent),color-mix(in srgb,var(--t-soft) 55%,transparent))}
+
+/* Floating chrome */
+#root .topbar,#root .sidebar,#root .bottom-nav,#root .formula-window-header,
+#root .material-dialog-header{
+  background:var(--glass-sheen),var(--glass-raised);
+  border-color:var(--glass-line);
+  box-shadow:0 8px 26px #1d244b14,inset 0 1px var(--glass-edge);
+  backdrop-filter:blur(32px) saturate(175%);
+  -webkit-backdrop-filter:blur(32px) saturate(175%);
+}
+#root .bottom-nav{box-shadow:0 -8px 30px #1d244b1a,inset 0 1px var(--glass-edge)}
+#root .bottom-nav button.active,#root .sidebar nav button.active{
+  background:color-mix(in srgb,var(--t-tint) 75%,transparent);
+  box-shadow:inset 0 1px var(--glass-edge);
+}
+
+/* Controls use a calmer, more opaque glass so entered values remain readable. */
+#root input,#root select,#root textarea,#root .btn:not(.primary),
+#root .icon-button,#root .segments,#root .sheet-link{
+  background:var(--glass-input);
+  border-color:var(--glass-line);
+}
+#root input:focus-visible,#root select:focus-visible,#root textarea:focus-visible,
+#root button:focus-visible,#root summary:focus-visible{outline-color:var(--t-brand)}
+#root .btn:not(.primary):hover,#root .icon-button:hover{background:var(--glass-raised)}
+
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  #root .card,#root .cost-card,#root .kpis .stat,#root .production-record,
+  #root .formula-window,#root .material-dialog,#root .sheet{background:var(--t-card-a)}
+}
+@media(prefers-reduced-transparency:reduce){
+  #root .card,#root .cost-card,#root .kpis .stat,#root .dashboard-metric,
+  #root .production-record,#root .formula-window,#root .material-dialog,
+  #root .sheet,#root .costing-current,#root .costing-steps,#root .bf-steps,
+  #root .bf-group,#root .pricing-tier,#root .pricing-tier-editor-group,
+  #root .topbar,#root .sidebar,#root .bottom-nav,#root input,#root select,#root textarea{
+    background:var(--t-card);backdrop-filter:none;-webkit-backdrop-filter:none;
+  }
+}
+@media(prefers-contrast:more){
+  #root .card,#root .cost-card,#root .production-record,#root .pricing-tier,
+  #root .topbar,#root .sidebar,#root .bottom-nav,#root input,#root select,#root textarea{
+    background:var(--t-card);border-color:var(--t-ink3);backdrop-filter:none;-webkit-backdrop-filter:none;
+  }
+}

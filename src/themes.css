@@ -61,57 +61,15 @@ html[data-theme="plum"]{
 }
 
 html[data-theme="sky"]{
-  --t-page:radial-gradient(circle at 8% 8%,#d8c9ff 0,transparent 28%),radial-gradient(circle at 92% 18%,#bde8ff 0,transparent 30%),radial-gradient(circle at 55% 100%,#d4f5e3 0,transparent 38%),linear-gradient(170deg,#eaf0ff 0%,#f8f4ff 52%,#eafaf5 100%);
+  --t-page:linear-gradient(170deg,#d6ecff 0%,#eaf5ff 50%,#f7fbff 100%);
   --t-card:#ffffff;--t-card-a:#ffffffe6;--t-glass:#ffffffd9;
   --t-ink:#14365a;--t-ink2:#1d4d80;--t-ink3:#46698f;--t-muted:#6f8fb2;
-  --t-brand:#635bda;--t-brand2:#27a7ef;
-  --t-btn:linear-gradient(135deg,#756bea,#28a9ef);--t-btn-ink:#ffffff;
-  --t-soft:#f8f6ff;--t-tint:#ece8ff;--t-line:#d9d8f4;--t-line2:#b9c8ed;
+  --t-brand:#2f9bf0;--t-brand2:#7cc6ff;
+  --t-btn:linear-gradient(135deg,#4db0ff,#1f7fe0);--t-btn-ink:#ffffff;
+  --t-soft:#f4faff;--t-tint:#e3f1fd;--t-line:#d3e6f7;--t-line2:#b2d3ef;
   --t-chip:#2f9bf0;--t-chip-ink:#ffffff;
   --t-c-total:#e3f1fd;--t-c-mac:#fff1e3;--t-c-mat:#dff0ff;--t-c-ready:#e1f7ee;--t-c-hold:#ffe9ee;
 }
-html[data-theme="apple"]{
-  --t-page:linear-gradient(145deg,#f5f7fb 0%,#eef3fb 52%,#e4f0ff 100%);
-  --t-card:#ffffff;--t-card-a:#ffffffe8;--t-glass:#ffffffc7;
-  --t-ink:#1d1d1f;--t-ink2:#2d2d32;--t-ink3:#5f6368;--t-muted:#73777d;
-  --t-brand:#007aff;--t-brand2:#5aa9ff;
-  --t-btn:linear-gradient(135deg,#007aff,#5aa9ff);--t-btn-ink:#ffffff;
-  --t-soft:#f4f7fc;--t-tint:#e7f1ff;--t-line:#d9e2ef;--t-line2:#b9cbe2;
-  --t-chip:#007aff;--t-chip-ink:#ffffff;
-  --t-c-total:#e7f1ff;--t-c-mac:#fff0e1;--t-c-mat:#e5f2ff;--t-c-ready:#e3f8ee;--t-c-hold:#fff0f3;
-}
-html[data-theme="apple"] .card,html[data-theme="apple"] .topbar,html[data-theme="apple"] .sheet{position:relative;overflow:hidden;background:linear-gradient(145deg,#ffffffb8,#ffffff72);box-shadow:0 18px 50px #1d1d1f18,0 1px 0 #ffffff inset,0 -1px 0 #ffffff80 inset;border:1px solid #ffffffc9;backdrop-filter:blur(28px) saturate(145%)}
-html[data-theme="apple"] .card:before,html[data-theme="apple"] .sheet:before{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(120deg,#ffffffb8 0%,transparent 30%,transparent 68%,#ffffff42 100%);opacity:.8}
-html[data-theme="apple"] .btn.primary{background:linear-gradient(180deg,#2190ff,#007aff);box-shadow:0 8px 20px #007aff3d,0 1px 0 #ffffff80 inset;border:1px solid #ffffff66}
-html[data-theme="apple"] .theme-toggle,html[data-theme="apple"] .theme-row,html[data-theme="apple"] input,html[data-theme="apple"] select{background:#ffffff78;border-color:#ffffffb8;backdrop-filter:blur(18px)}
-html[data-theme="apple"] button:focus-visible,html[data-theme="apple"] input:focus{outline:3px solid #007aff33;outline-offset:2px}
-html[data-theme="apple"]{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Arial,sans-serif;font-size:16px;letter-spacing:-.01em}
-html[data-theme="apple"] .login-page{background:radial-gradient(circle at 8% 12%,#ffd7e7 0,transparent 28%),radial-gradient(circle at 92% 18%,#cfe4ff 0,transparent 30%),radial-gradient(circle at 50% 100%,#d7f8e8 0,transparent 36%),#f8f7ff}
-html[data-theme="apple"] .login-card{border-color:#ffffffd9;box-shadow:0 28px 90px #7c65c52b,0 0 0 1px #ffb7da33 inset}
-html[data-theme="apple"] .login-card .eyebrow{color:#8b5cf6}
-html[data-theme="apple"] .pin-boxes input:nth-child(1){border-color:#b9a5ff}.pin-boxes input:nth-child(2){border-color:#8fd2ff}.pin-boxes input:nth-child(3){border-color:#ffb0d0}.pin-boxes input:nth-child(4){border-color:#9ee4c1}
-html[data-theme="apple"] .shell{background:radial-gradient(circle at 5% 5%,#ffdcec 0,transparent 24rem),radial-gradient(circle at 95% 20%,#d9e8ff 0,transparent 28rem),radial-gradient(circle at 60% 100%,#dff8ed 0,transparent 30rem)}
-html[data-theme="apple"] .sidebar{background:linear-gradient(180deg,#ffffffc7,#f4f1ffb8);border-right-color:#ffffffd0;backdrop-filter:blur(28px)}
-html[data-theme="apple"] .card:nth-of-type(3n+1){--t-tint:#eee9ff}.card:nth-of-type(3n+2){--t-tint:#e5f4ff}.card:nth-of-type(3n){--t-tint:#e7f8f0}
-html[data-theme="apple"] .stat,html[data-theme="apple"] .dashboard-metric{background:linear-gradient(135deg,#ffffffb8,#eef4ff99);border-color:#ffffffc7;box-shadow:0 8px 22px #6c7eb51a}
-html[data-theme="apple"] .btn.secondary{background:#ffffffa8;border-color:#ffffffd0}
-html[data-theme="iphone16"]{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-size:16px;--t-page:radial-gradient(circle at 10% 10%,#d9c8ff 0,transparent 30%),radial-gradient(circle at 92% 20%,#bde9ff 0,transparent 32%),radial-gradient(circle at 45% 100%,#c8f5e3 0,transparent 38%),#f4f9ff;--t-card:#ffffff8c;--t-card-a:#ffffffa8;--t-glass:#ffffff70;--t-ink:#17233d;--t-ink2:#263b63;--t-ink3:#536b92;--t-muted:#7287a6;--t-brand:#0a84ff;--t-brand2:#6bb8ff;--t-btn:linear-gradient(135deg,#0a84ff,#62b2ff);--t-btn-ink:#fff;--t-soft:#eff7ff99;--t-tint:#dff0ffb8;--t-line:#ffffffb8;--t-line2:#b9d8f4;--t-chip:#0a84ff;--t-chip-ink:#fff;--t-c-total:#e2efff;--t-c-mac:#fff0df;--t-c-mat:#e2f3ff;--t-c-ready:#e0f8ec;--t-c-hold:#ffeaf1}
-html[data-theme="iphone16"] .card,html[data-theme="iphone16"] .topbar,html[data-theme="iphone16"] .sidebar,html[data-theme="iphone16"] .sheet{background:linear-gradient(145deg,#ffffffa8,#ffffff55);border:1px solid #ffffffc9;box-shadow:0 18px 50px #5384b52b,0 1px 0 #fff inset;backdrop-filter:blur(30px) saturate(155%)}
-html[data-theme="iphone16"] .card:before,html[data-theme="iphone16"] .sheet:before{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(120deg,#ffffffb8,transparent 32%,transparent 70%,#b8ddff44)}
-html[data-theme="iphone16"] h1{font-size:clamp(1.8rem,4vw,2.35rem);letter-spacing:-.045em;font-weight:750}html[data-theme="iphone16"] h2{font-weight:750;letter-spacing:-.025em}
-html[data-theme="iphone16"] .btn.primary{background:linear-gradient(180deg,#2d9aff,#0879ef);box-shadow:0 8px 22px #0a84ff3d,0 1px 0 #ffffff99 inset}
-html[data-theme="perfume"]{font-family:Georgia,"Times New Roman",serif;--t-page:linear-gradient(145deg,#f4eade 0%,#f7eee6 55%,#ead4d1 100%);--t-card:#fffaf4;--t-card-a:#fffaf4ed;--t-glass:#fffaf4d9;--t-ink:#0a0a0a;--t-ink2:#6e1423;--t-ink3:#70444c;--t-muted:#8c686d;--t-brand:#6e1423;--t-brand2:#b76e79;--t-btn:linear-gradient(135deg,#6e1423,#b76e79);--t-btn-ink:#f4eade;--t-soft:#f8eee7;--t-tint:#f1dfe0;--t-line:#e4c8c5;--t-line2:#c89398;--t-chip:#6e1423;--t-chip-ink:#f4eade;--t-c-total:#f1dfe0;--t-c-mac:#f7e4d5;--t-c-mat:#eee2ef;--t-c-ready:#e0f1e8;--t-c-hold:#f5dfe4}
-html[data-theme="perfume"] h1,html[data-theme="perfume"] h2,html[data-theme="perfume"] h3{font-family:Georgia,"Times New Roman",serif;letter-spacing:-.025em}html[data-theme="perfume"] .card,html[data-theme="perfume"] .topbar,html[data-theme="perfume"] .sidebar,html[data-theme="perfume"] .sheet{background:linear-gradient(145deg,#fffaf4e8,#f4eadee8);border-color:#b76e794d;box-shadow:0 18px 45px #6e142322,0 1px 0 #ffffff inset;backdrop-filter:blur(18px)}html[data-theme="perfume"] .btn.primary{background:linear-gradient(135deg,#6e1423,#b76e79);box-shadow:0 8px 20px #6e142366}html[data-theme="perfume"] .sidebar nav button.active{background:#6e142333;color:#f4eade;box-shadow:inset 3px 0 #b76e79}html[data-theme="perfume"] .dashboard-metric{background:linear-gradient(145deg,#32151d,#1b0e12);border-color:#b76e7938}html[data-theme="perfume"] input,html[data-theme="perfume"] select{background:#fffaf4;color:#0a0a0a;border-color:#e4c8c5}
-html[data-theme="iphone16"] body{background:var(--t-page) fixed;position:relative}html[data-theme="iphone16"] body:before,html[data-theme="iphone16"] body:after{content:'';position:fixed;z-index:-1;width:34rem;height:34rem;border-radius:50%;filter:blur(70px);opacity:.34;pointer-events:none;animation:liquidDrift 18s ease-in-out infinite alternate}html[data-theme="iphone16"] body:before{top:-12rem;left:-9rem;background:#c7a8ff}html[data-theme="iphone16"] body:after{right:-10rem;bottom:-12rem;background:#78dcff;animation-delay:-7s}@keyframes liquidDrift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(3rem,2rem,0) scale(1.14)}}
-html[data-theme="iphone16"] .card,html[data-theme="iphone16"] .sheet{isolation:isolate}html[data-theme="iphone16"] .card:after,html[data-theme="iphone16"] .sheet:after{content:'';position:absolute;inset:1px;border-radius:inherit;pointer-events:none;background:linear-gradient(115deg,#ffffff8c 0%,transparent 18%,transparent 72%,#ffffff35 90%,transparent 100%);mix-blend-mode:screen;animation:liquidShine 9s ease-in-out infinite alternate}@keyframes liquidShine{from{opacity:.35;transform:translateX(-3%)}to{opacity:.8;transform:translateX(3%)}}
-html[data-theme="sky"] .card{box-shadow:0 14px 34px #6576c51a,0 1px 0 #ffffff inset;background:linear-gradient(145deg,#ffffffed,#f4f1ffdb)}
-html[data-theme="sky"] .dashboard-metric:nth-child(1),html[data-theme="sky"] .dashboard-metric:nth-child(5){background:linear-gradient(135deg,#eee9ff,#e3dfff)}
-html[data-theme="sky"] .dashboard-metric:nth-child(2),html[data-theme="sky"] .dashboard-metric:nth-child(6){background:linear-gradient(135deg,#e5f8f1,#d5f1e6)}
-html[data-theme="sky"] .dashboard-metric:nth-child(3),html[data-theme="sky"] .dashboard-metric:nth-child(4){background:linear-gradient(135deg,#fff0e7,#ffe2d1)}
-html[data-theme="apple"] h1{font-size:clamp(1.8rem,4vw,2.35rem);letter-spacing:-.045em;font-weight:750}
-html[data-theme="apple"] h2{font-size:1.2rem;letter-spacing:-.025em;font-weight:750}
-html[data-theme="apple"] p,html[data-theme="apple"] label,html[data-theme="apple"] button{font-size:.9rem}
-html[data-theme="apple"] .eyebrow{font-size:.68rem;letter-spacing:.16em;font-weight:800}
 html[data-theme="violet"]{
   --t-page:linear-gradient(160deg,#4338b8 0%,#5b4fd6 50%,#7a63e6 100%);
   --t-card:#6a5ee6;--t-card-a:#6a5ee6e6;--t-glass:#5a4ed4ee;
@@ -282,9 +240,3 @@ html #root .lg-spinner{width:16px;height:16px;border-radius:50%;border:2px solid
 @keyframes lg-spin{to{transform:rotate(360deg)}}
 @media (max-width:820px){html #root .lg-bottle{width:70px;right:18px;top:22px}html #root .lg-foot{display:none}}
 @media (prefers-reduced-motion:reduce){html #root .lg-bottle,html #root .lg-orb,html #root .lg-hero>*,html #root .lg-card,html #root .lg-spinner{animation:none}}
-html[data-theme="iphone16"] body{font-weight:450;letter-spacing:-.012em}html[data-theme="iphone16"] h1{font-weight:780;line-height:1.05}html[data-theme="iphone16"] h2{font-size:1.16rem;line-height:1.15}html[data-theme="iphone16"] h3{font-size:1rem;letter-spacing:-.02em}html[data-theme="iphone16"] p{font-size:.9rem;line-height:1.55}html[data-theme="iphone16"] .eyebrow{font-size:.64rem;letter-spacing:.18em;font-weight:850;color:#397fd0}html[data-theme="iphone16"] button{font-weight:700;letter-spacing:-.01em}html[data-theme="iphone16"] input,html[data-theme="iphone16"] select{font-size:.9rem;font-weight:600}html[data-theme="iphone16"] .stat strong,html[data-theme="iphone16"] .dashboard-metric strong{font-size:1.15rem;font-weight:780;letter-spacing:-.035em}html[data-theme="iphone16"] small{font-size:.72rem;line-height:1.4}
-html[data-theme="iphone16"] main{padding-top:18px;padding-bottom:34px}html[data-theme="iphone16"] .topbar{padding-top:16px;padding-bottom:16px}html[data-theme="iphone16"] .card{padding:14px}.iphone16 .card-head{margin-bottom:.45rem}html[data-theme="iphone16"] .card-head{margin-bottom:.55rem}html[data-theme="iphone16"] .dashboard-metrics{gap:.55rem}html[data-theme="iphone16"] .dashboard-metric{padding:.7rem}.shell main>p.bc-sep{margin-top:.8rem;margin-bottom:.45rem}html[data-theme="iphone16"] .card p{margin-bottom:.55rem}
-html[data-theme="iphone16"] .shell{position:relative;isolation:isolate}html[data-theme="iphone16"] .shell:before,html[data-theme="iphone16"] .shell:after{content:'';position:fixed;z-index:-1;border-radius:50%;pointer-events:none;filter:blur(1px);background:radial-gradient(circle at 30% 25%,#ffffffd9 0 8%,#ffffff55 18%,#8fd3ff45 52%,#8fd3ff05 72%);border:1px solid #ffffff99;box-shadow:inset -12px -16px 24px #6caee933,inset 10px 10px 18px #ffffffb8,0 18px 35px #4b83bf22;animation:bubbleFloat 13s ease-in-out infinite alternate}html[data-theme="iphone16"] .shell:before{width:170px;height:170px;top:18%;right:7%}html[data-theme="iphone16"] .shell:after{width:105px;height:105px;bottom:14%;left:20%;animation-delay:-5s}@keyframes bubbleFloat{from{transform:translate3d(0,0,0) rotate(-4deg)}to{transform:translate3d(20px,-22px,0) rotate(5deg)}}
-
-html[data-theme="iphone16"] .dashboard-metric{border-radius:18px;min-height:82px;transition:transform .2s ease,box-shadow .2s ease}html[data-theme="iphone16"] .dashboard-metric:hover{transform:translateY(-3px);box-shadow:0 16px 28px #4b83bf2b}html[data-theme="iphone16"] .sidebar nav button.active{background:linear-gradient(135deg,#dcd5ffcc,#d5efffcc);box-shadow:0 7px 18px #6576c52b;color:#315fc0}html[data-theme="iphone16"] .sidebar nav button:hover:not(.active){background:#ffffff70}html[data-theme="iphone16"] .bottom-nav{background:#ffffffa8;border-top:1px solid #ffffffd0;backdrop-filter:blur(24px) saturate(160%)}html[data-theme="iphone16"] .bottom-nav button.active{background:linear-gradient(135deg,#dcd5ff,#d5efff);color:#315fc0;box-shadow:0 5px 14px #6576c52b;transform:translateY(-2px)}html[data-theme="iphone16"] .costing-steps{background:#ffffff7a;border:1px solid #ffffffbf;border-radius:18px;padding:.45rem;box-shadow:0 8px 20px #4b83bf14;backdrop-filter:blur(18px)}html[data-theme="iphone16"] .costing-steps button{border-radius:13px;min-height:42px}html[data-theme="iphone16"] .costing-steps button.active{background:linear-gradient(135deg,#d9d2ff,#d5efff);color:#315fc0;box-shadow:0 5px 12px #6576c52b}
-

@@ -64,3 +64,32 @@ on public.app_state for update
 to authenticated
 using (auth.uid() = user_id and exists (select 1 from public.profiles where profiles.user_id = auth.uid() and profiles.approved))
 with check (auth.uid() = user_id and exists (select 1 from public.profiles where profiles.user_id = auth.uid() and profiles.approved));
+
+-- One shared Celestine workspace. Every approved user reads and writes the same
+-- formulation, material, batch, costing, and pricing data.
+create table if not exists public.shared_workspace (
+  workspace_id text primary key default 'celestine',
+  data jsonb not null default '{}'::jsonb,
+  updated_at timestamptz not null default now()
+);
+
+alter table public.shared_workspace enable row level security;
+
+drop policy if exists "Approved users can read shared workspace" on public.shared_workspace;
+create policy "Approved users can read shared workspace"
+on public.shared_workspace for select
+to authenticated
+using (exists (select 1 from public.profiles where profiles.user_id = auth.uid() and profiles.approved));
+
+drop policy if exists "Approved users can create shared workspace" on public.shared_workspace;
+create policy "Approved users can create shared workspace"
+on public.shared_workspace for insert
+to authenticated
+with check (workspace_id = 'celestine' and exists (select 1 from public.profiles where profiles.user_id = auth.uid() and profiles.approved));
+
+drop policy if exists "Approved users can update shared workspace" on public.shared_workspace;
+create policy "Approved users can update shared workspace"
+on public.shared_workspace for update
+to authenticated
+using (workspace_id = 'celestine' and exists (select 1 from public.profiles where profiles.user_id = auth.uid() and profiles.approved))
+with check (workspace_id = 'celestine' and exists (select 1 from public.profiles where profiles.user_id = auth.uid() and profiles.approved));

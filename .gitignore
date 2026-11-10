@@ -4,3 +4,15 @@ dist/
 .env
 .env.local
 .vercel/
+
+.vercel
+.env*
+
+.pnpm-store/
+/celestine-pefume-studio-main/
+/pnpm-workspace.yaml
+
+/src/src/
+/public/public/
+/scripts/scripts/
+/supabase/supabase/

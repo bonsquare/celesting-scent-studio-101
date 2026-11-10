@@ -16,7 +16,7 @@ Install dependencies with `pnpm install`, then run `pnpm dev`. Run `pnpm test` a
 
 ## Data
 
-Formulas, ingredient and expense libraries, and historical batch snapshots are stored in IndexedDB on the current device. When the Supabase environment variables are configured, the app also syncs one shared Celestine workspace to the `app_state` table. The first connected device seeds an empty cloud workspace with its local data. Download a JSON backup from Settings before destructive changes. Restoring a backup replaces current workspace data after confirmation.
+Formulas, ingredient and expense libraries, and historical batch snapshots are stored in IndexedDB on the current device. When the Supabase environment variables are configured, approved users share one Celestine workspace through the `shared_workspace` table. The first connected device seeds an empty cloud workspace with its local data; later users load that same formulation library and production data. Download a JSON backup from Settings before destructive changes. Restoring a backup replaces current workspace data after confirmation.
 
 To enable Supabase, run `supabase/schema.sql` in the project SQL editor and copy `.env.example` to `.env.local`. Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` from the Supabase project connection settings. Add the same variables to the Vercel project before deploying. Enable the Google provider in Supabase Authentication and add the app URL to its redirect allow list. `bonie.office@gmail.com` is the master account; other Google accounts remain pending until the master approves them under Settings → User access.
 

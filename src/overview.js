@@ -2,7 +2,7 @@ import {calculate,num} from './logic';
 import {calculatePricingTiers,defaultPricingTiers} from './pricing';
 import {stockRows} from './stock';
 
-const activeStatuses=['Planned','Mixing','Maceration','Maturing','Bottling'];
+const activeStatuses=['Planned','Mixing','Maceration','Maturing','Ready for Distribution','Bottling'];
 const localDate=date=>`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
 
 // What needs doing, for the Dashboard banner. Every number is a count of things to look at.
@@ -24,7 +24,7 @@ export function dashboardAlerts(data,now=new Date()){
   return {
     formulas:formulas.length,
     lowStock:data?stockRows(data).filter(row=>row.low).length:0,
-    ready:batches.filter(batch=>!batch.archived&&!batch.onHold&&['Maturing','Bottling'].includes(batch.status)&&batch.maturationDate&&batch.maturationDate<=today).length,
+    ready:batches.filter(batch=>!batch.archived&&!batch.onHold&&((batch.statusMode==='manual'&&batch.status==='Ready for Distribution')||(['Maturing','Ready for Distribution','Bottling'].includes(batch.status)&&batch.maturationDate&&batch.maturationDate<=today))).length,
     inProgress:batches.filter(batch=>!batch.archived&&activeStatuses.includes(batch.status)).length,
     needBottle,
     unsavedPrice
