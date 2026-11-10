@@ -1,11 +1,9 @@
 import {useEffect,useState} from 'react';
 import {Moon,Sun,Sunrise} from 'lucide-react';
-import {attentionCount} from './overview';
 import {christmasScenes} from './ChristmasScenes';
 import {greetings,sceneFromSearch,themeFromSearch} from './timeOfDay';
 
 const icons={morning:Sunrise,afternoon:Sun,evening:Moon};
-const plural=(count,one,many)=>`${count} ${count===1?one:many}`;
 
 const Hills=({back,mid,front,trees})=><>
   <path d="M0 132 Q70 104 140 122 T270 116 T400 124 V170 H0Z" fill={back}/>
@@ -63,27 +61,16 @@ const scenes={
 };
 
 // The top of the Dashboard: a time-of-day scene, a greeting and your name. Chips appear only when something needs attention.
-export default function DashboardBanner({name,alerts,onGo}){
+export default function DashboardBanner({name}){
   const [now,setNow]=useState(()=>new Date());
   useEffect(()=>{const timer=setInterval(()=>setNow(new Date()),60000);return()=>clearInterval(timer)},[]);
   const scene=sceneFromSearch(location.search,now),theme=themeFromSearch(location.search,now),christmas=theme==='christmas';
   const Icon=icons[scene];
-  const items=[
-    {key:'low',count:alerts.lowStock,text:plural(alerts.lowStock,'low-stock item','low-stock items'),page:'Inventory of Raw Materials'},
-    {key:'ready',count:alerts.ready,text:plural(alerts.ready,'batch ready to bottle','batches ready to bottle'),page:'Batches'},
-    {key:'bottle',count:alerts.needBottle,text:plural(alerts.needBottle,'formula needs a bottle size','formulas need a bottle size'),page:'Costing'},
-    {key:'price',count:alerts.unsavedPrice,text:plural(alerts.unsavedPrice,'price not saved','prices not saved'),page:'Costing'}
-  ].filter(item=>item.count>0);
-  const showChips=attentionCount(alerts)>0||alerts.inProgress>0;
   return <section className={`dashboard-banner scene-${scene}${christmas?' theme-christmas':''}`} aria-label={`${greetings[scene]}, ${name||'welcome'}`}>
     {(christmas?christmasScenes:scenes)[scene]}
     <div className="banner-text">
       <p className="banner-greeting"><Icon size={18} aria-hidden="true"/> {greetings[scene]}</p>
       <h2 className="banner-name">{name||'Celestine Studio'}</h2>
     </div>
-    {showChips&&<div className="banner-chips" role="list">
-      {items.map(item=><button type="button" role="listitem" key={item.key} className="banner-chip warn" onClick={()=>onGo(item.page)}><strong>{item.count}</strong> {item.text.replace(/^\d+ /,'')}</button>)}
-      {alerts.inProgress>0&&<button type="button" role="listitem" className="banner-chip" onClick={()=>onGo('Batches')}><strong>{alerts.inProgress}</strong> {alerts.inProgress===1?'batch':'batches'} in progress</button>}
-    </div>}
   </section>;
 }
