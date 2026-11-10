@@ -1,4 +1,5 @@
 /* Shared glass surfaces adapt to every palette in themes.css. */
+html body #root .formula-window .formula-view-actions{background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 #root .account-lock{display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
 @media(max-width:520px){#root .account-lock span{display:none}#root .account-lock{min-width:40px;padding:8px}}
 html body #root .pricing-history-card{cursor:pointer;overflow:visible}
