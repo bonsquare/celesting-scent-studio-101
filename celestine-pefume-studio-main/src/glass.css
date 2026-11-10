@@ -1,4 +1,11 @@
 /* Shared glass surfaces adapt to every palette in themes.css. */
+#root .saved-price-open{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:4px 0;border:0;background:none;color:var(--t-ink2);font:inherit;font-weight:800;text-align:left;cursor:pointer}
+#root .saved-price-open small{font-size:10px;font-weight:600;text-decoration:underline}
+#root .saved-price-summary{grid-column:1/-1;width:100%;padding:14px;border:1px solid var(--t-line2);border-radius:12px;background:var(--t-card);color:var(--t-ink)}
+#root .saved-price-summary h3{margin:0 0 8px;font-size:15px}
+#root .saved-price-summary>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:12px 0;border-top:1px solid var(--t-line)}
+#root .saved-price-summary>div>strong{grid-column:1/-1}
+#root .saved-price-summary span{display:flex;flex-direction:column;gap:4px;font-size:11px;color:var(--t-ink3)}
 html body #root .batch-form .bf-actions{position:relative!important;bottom:auto!important;z-index:auto;margin-top:16px;padding:12px 0;clear:both}
 /* Separate the primary and destructive formula actions. */
 html body #root .formula-window .formula-view-actions{width:100%;justify-content:space-between;gap:24px;justify-self:stretch;box-sizing:border-box}
