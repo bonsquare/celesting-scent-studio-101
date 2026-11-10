@@ -23,6 +23,7 @@ export default function CloudPinGate({children}){
   return()=>{active=false;clearInterval(timer);events.forEach(event=>window.removeEventListener(event,activity));document.removeEventListener('visibilitychange',check)};
  },[state]);
  if(state==='unlocked')return children;
+ if(state==='loading')return <div className="loading" role="status"><img className="loading-logo" src="/celestine-logo.jpg" alt="Celestine & Co." width="84" height="84"/><span>Refreshing your workspace…</span></div>;
  const enter=async(value)=>{if(value.length!==4||busy)return;setError('');if(state==='setup'||state==='new_pin'){
   if(value==='0000'){setDigits(['','','','']);return setError('Choose a PIN different from 0000.');}
   if(!confirmation){setConfirmation(value);setDigits(['','','','']);return;}
