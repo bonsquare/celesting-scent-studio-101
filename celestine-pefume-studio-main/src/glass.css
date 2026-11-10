@@ -126,3 +126,62 @@ body{background:radial-gradient(circle at 4% 8%,color-mix(in srgb,var(--t-brand)
     background:var(--t-card);border-color:var(--t-ink3);backdrop-filter:none;-webkit-backdrop-filter:none;
   }
 }
+
+/* Final system-wide UI pass: calm hierarchy, tighter rhythm, and touch-safe controls. */
+#root{--ui-radius:18px;--ui-radius-sm:12px;--ui-gap:clamp(.7rem,1.4vw,1.1rem);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:-.01em}
+#root .shell{min-height:100dvh}
+#root .workspace{min-width:0}
+#root #main{width:min(100%,1220px);margin:0 auto;padding:clamp(1rem,2vw,1.5rem) clamp(.85rem,2.4vw,2rem) 5.5rem}
+#root .topbar{min-height:72px;padding:clamp(.8rem,1.7vw,1.1rem) clamp(1rem,2.5vw,2rem);position:sticky;top:0;z-index:20}
+#root .topbar h1{font-size:clamp(1.25rem,2.4vw,1.65rem);letter-spacing:-.035em}
+#root .eyebrow{font-size:.62rem;letter-spacing:.14em;font-weight:850}
+#root .bc-sep{display:flex;align-items:center;gap:.7rem;margin:1.35rem 0 .65rem;color:var(--t-muted);font-size:.64rem;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+#root .bc-sep:after{content:"";height:1px;flex:1;background:var(--glass-line)}
+#root .card{border-radius:var(--ui-radius);padding:clamp(.9rem,1.8vw,1.2rem)}
+#root .card-head{gap:.75rem;margin-bottom:.8rem}
+#root .card-head h2{font-size:clamp(.95rem,1.7vw,1.15rem);letter-spacing:-.025em}
+#root .muted,.muted{line-height:1.45}
+#root .btn{min-height:38px;border-radius:11px;padding:.55rem .85rem;font-size:.75rem;font-weight:800;letter-spacing:-.005em;transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
+#root .btn.primary{box-shadow:0 7px 16px color-mix(in srgb,var(--t-brand) 25%,transparent)}
+#root .btn:hover:not(:disabled){transform:translateY(-1px)}
+#root .btn:active:not(:disabled){transform:translateY(0) scale(.98)}
+#root .sidebar{width:238px;padding:1rem .75rem}
+#root .sidebar nav{gap:.3rem}
+#root .sidebar nav button{min-height:44px;border-radius:12px;padding:.65rem .75rem;font-size:.78rem;font-weight:750}
+#root .sidebar nav button.active{font-weight:850}
+#root .brand{padding:.4rem .5rem 1rem;margin-bottom:.4rem}
+#root .bottom-nav{padding:.5rem max(.55rem,env(safe-area-inset-left)) calc(.5rem + env(safe-area-inset-bottom));gap:.25rem}
+#root .bottom-nav button{min-height:48px;border-radius:13px;font-size:.62rem;font-weight:750}
+#root .dashboard-hero{border-radius:var(--ui-radius);padding:clamp(1rem,2vw,1.5rem)}
+#root .dashboard-metrics{gap:.7rem}
+#root .dashboard-metric{min-height:76px;border-radius:var(--ui-radius-sm);padding:.75rem}
+#root .dashboard-metric-icon{width:36px;height:36px;border-radius:11px}
+#root input,#root select,#root textarea{min-height:40px;border-radius:10px;font-size:.8rem}
+#root label.field{gap:.35rem;font-size:.7rem;font-weight:750}
+#root .toast{right:clamp(.75rem,2vw,1.5rem);bottom:calc(5.5rem + env(safe-area-inset-bottom));max-width:min(360px,calc(100vw - 1.5rem));border-radius:14px;padding:.75rem .9rem;box-shadow:0 14px 34px #1d244b24}
+@media(max-width:900px){
+  #root .sidebar{display:none}
+  #root .topbar{padding-inline:1rem}
+  #root #main{padding-inline:clamp(.7rem,3vw,1rem)}
+}
+@media(max-width:520px){
+  #root .topbar{min-height:64px}
+  #root .topbar .eyebrow{font-size:.55rem}
+  #root .topbar h1{font-size:1.15rem}
+  #root .topbar-account .profile-copy{display:none}
+  #root .card{border-radius:15px;padding:.85rem}
+  #root .dashboard-hero h2{font-size:1.18rem}
+  #root .dashboard-hero-actions{display:grid;grid-template-columns:1fr 1fr}
+  #root .dashboard-hero-actions .btn{width:100%;min-width:0}
+  #root .dashboard-metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem}
+  #root .dashboard-metric{min-height:68px;padding:.6rem;gap:.5rem}
+  #root .dashboard-metric-icon{width:30px;height:30px}
+  #root .dashboard-metric>div span{font-size:.6rem}
+  #root .dashboard-metric strong{font-size:.86rem}
+  #root .btn{min-height:40px}
+}
+@media(max-width:360px){
+  #root #main{padding-inline:.55rem}
+  #root .dashboard-hero-actions{grid-template-columns:1fr}
+  #root .dashboard-metrics{grid-template-columns:1fr}
+}
