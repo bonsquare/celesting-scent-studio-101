@@ -11,7 +11,7 @@ export const themes=[
   {id:'night',name:'Night Pulse',note:'Near-black with violet, coral and mint',dark:true,swatch:['#0b0c14','#8b6cf5','#ff6f7f','#2fd6a0'],bar:'#0b0c14'},
   {id:'lavender',name:'Lavender Peach',note:'Soft lavender with peach and rose',dark:false,swatch:['#f3efff','#a898f0','#ffb3b0','#3b3270'],bar:'#f3efff'}
   ,{id:'apple',name:'Apple Glass',note:'Frosted white, graphite and luminous blue',dark:false,swatch:['#f5f7fb','#007aff','#dce8ff','#1d1d1f'],bar:'#f5f7fb'}
-  ,{id:'iphone16',name:'iPhone 16 Clear',note:'Crystal glass, sky blue and soft neon highlights',dark:false,swatch:['#eef7ff','#0a84ff','#d9c8ff','#b8f3df'],bar:'#eef7ff'}
+  ,{id:'iphone16',name:'Crystal Glass',note:'Translucent blue, lavender and soft mint highlights',dark:false,swatch:['#eef7ff','#0a84ff','#d9c8ff','#b8f3df'],bar:'#eef7ff'}
 ];
 export const themeKey='celestine-theme';
 export const defaultTheme='pastel';
