@@ -1,4 +1,18 @@
 /* Shared glass surfaces adapt to every palette in themes.css. */
+#root .access-list{gap:8px}
+#root .access-row{padding:10px 12px;min-height:64px;gap:10px;border-radius:13px}
+#root .access-row .access-identity{display:flex;flex-direction:row;align-items:center;gap:10px;min-width:0}
+#root .access-identity>span:last-child{display:flex;flex-direction:column;gap:3px;min-width:0}
+#root .access-avatar{width:30px;height:30px;flex:0 0 30px;border-radius:10px;margin:0;font-size:12px}
+#root .access-identity strong{font-size:12px;line-height:1.3;overflow-wrap:anywhere}
+#root .access-identity small{font-size:10px;line-height:1.3}
+#root .access-row .access-actions{gap:5px;align-items:flex-end;flex-shrink:0}
+#root .access-row .btn{min-height:34px;padding:6px 9px;font-size:11px}
+#root .access-badge{padding:5px 9px;font-size:10px}
+#root .access-summary{gap:7px;margin-bottom:10px}
+#root .access-summary>div{padding:9px 11px;min-height:50px}
+#root .access-summary strong{font-size:16px}
+@media(max-width:380px){#root .access-row{flex-wrap:wrap}#root .access-row .access-actions{margin-left:auto}}
 /* Avoid repeatedly compositing layered glass while scrolling on phones. */
 @media(max-width:900px),(hover:none) and (pointer:coarse){
  html body #root :is(.card,.cost-card,.stat,.dashboard-metric,.production-record,.formula-window,.material-dialog,.sheet,.costing-current,.costing-steps,.bf-steps,.bf-group,.pricing-tier,.pricing-tier-editor-group,.topbar,.sidebar,.bottom-nav,input,select,textarea,.theme-row,.theme-toggle){
