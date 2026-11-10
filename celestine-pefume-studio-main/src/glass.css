@@ -1,4 +1,10 @@
 /* Shared glass surfaces adapt to every palette in themes.css. */
+html body #root .formula-view-actions{justify-content:flex-end;align-items:center;gap:10px;padding:12px 0;background:var(--t-card);border-top:1px solid var(--t-line)}
+html body #root .formula-view-actions .btn{flex:0 0 auto!important;min-width:0;min-height:40px;width:auto;padding:9px 16px;border-radius:12px;font-size:12px}
+html body #root .formula-view-actions .btn.primary{background:var(--t-btn);color:var(--t-btn-ink);box-shadow:0 4px 10px color-mix(in srgb,var(--t-brand) 20%,transparent)}
+html body #root .formula-view-actions .danger-action{background:transparent;color:var(--ui-danger-ink);border-color:transparent;box-shadow:none}
+html body #root .formula-view-actions .danger-action:hover{background:var(--ui-danger-bg);color:var(--ui-danger-ink)}
+@media(max-width:380px){html body #root .formula-view-actions{gap:6px;justify-content:space-between}html body #root .formula-view-actions .btn{padding:9px 11px;font-size:11px}}
 @media(max-width:1023px){
  html.keyboard-open #root .bottom-nav{display:none!important}
  html:has(.formula-window-backdrop,.material-dialog-backdrop,.sheet-backdrop) #root .bottom-nav{display:none!important}
