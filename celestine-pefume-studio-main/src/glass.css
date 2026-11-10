@@ -202,6 +202,15 @@ body{background:radial-gradient(circle at 4% 8%,color-mix(in srgb,var(--t-brand)
 
 /* Keep the enhanced visual language consistent when any theme is selected. */
 /* Formula summaries use the selected palette throughout, including dark themes. */
+html body #root .formula-summary-banner{background:linear-gradient(120deg,var(--t-soft),var(--t-tint))!important;color:var(--t-ink)!important;border-color:var(--t-line2)!important}
+html body #root .formula-summary-banner :is(.formula-summary-name,.formula-summary-total strong,.formula-summary-scent dd){color:var(--t-ink)!important;text-shadow:none!important}
+html body #root .formula-summary-banner :is(.eyebrow,.formula-summary-total small,.formula-summary-scent dt,.formula-summary-concentration small){color:var(--t-ink3)!important}
+html body #root .formula-summary-banner :is(.formula-summary-concentration,.formula-summary-identity>span,.summary-print-button){background:var(--t-card)!important;color:var(--t-ink)!important;border-color:var(--t-line2)!important}
+html body #root .formula-summary-section .formula-summary-ingredient{background:var(--t-soft)!important;border-color:var(--t-line)!important}
+html body #root .formula-summary-row-top strong{color:var(--t-ink)!important}
+html body #root .formula-summary-row-top span{background:var(--t-tint)!important;color:var(--t-ink)!important}
+html body #root .formula-summary-track{background:var(--t-line)!important}
+html body #root .formula-summary-track i{background:var(--t-brand)!important}
 #root .formula-summary-banner{background:linear-gradient(120deg,var(--t-soft),var(--t-tint));border-color:var(--t-line2);box-shadow:0 8px 24px #17233d18,inset 0 1px #ffffff30;color:var(--t-ink)}
 #root .formula-summary-banner .formula-summary-name{color:var(--t-ink);border-bottom-color:var(--t-brand);text-shadow:none}
 #root .formula-summary-banner .eyebrow,#root .formula-summary-banner .formula-summary-total small{color:var(--t-ink3)}
