@@ -1,4 +1,8 @@
 /* Shared glass surfaces adapt to every palette in themes.css. */
+/* Button groups have no enclosing panel; buttons retain their own surfaces. */
+html body #root :is(.bf-actions,.bd-actions,.access-actions,.backup-actions,.stock-entry-actions,.stock-row-actions,.material-dialog-actions,.formula-result-actions,.formula-view-actions,.saved-formula-actions,.bc-actions,.pricing-toolbar,.step-nav){background:transparent!important;background-image:none!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+html body #root :is(.bf-actions,.bd-actions,.access-actions,.backup-actions,.stock-entry-actions,.stock-row-actions,.material-dialog-actions,.formula-result-actions,.formula-view-actions,.saved-formula-actions,.bc-actions,.pricing-toolbar,.step-nav)::before,
+html body #root :is(.bf-actions,.bd-actions,.access-actions,.backup-actions,.stock-entry-actions,.stock-row-actions,.material-dialog-actions,.formula-result-actions,.formula-view-actions,.saved-formula-actions,.bc-actions,.pricing-toolbar,.step-nav)::after{display:none!important}
 html body #root .formula-window .formula-view-actions{background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 #root .account-lock{display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
 @media(max-width:520px){#root .account-lock span{display:none}#root .account-lock{min-width:40px;padding:8px}}
