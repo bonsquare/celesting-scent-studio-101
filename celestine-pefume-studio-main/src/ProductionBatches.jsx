@@ -25,8 +25,8 @@ const ProductionStageSteps=({aging})=>{
 };
 
 export default function ProductionBatches({data,by='Local workspace',onChange,onNotice,initialView}){
-  const [view,setView]=useState(()=>{let saved;try{saved=JSON.parse(sessionStorage.getItem('studio-production-view')||'null')}catch{}const candidate=initialView||saved;if(candidate?.mode==='new')return {mode:'new'};return ['detail','edit'].includes(candidate?.mode)&&data.batches.some(batch=>batch.id===candidate.id)?candidate:{mode:'list'}}),[query,setQuery]=useState(''),[scent,setScent]=useState('all'),[stage,setStage]=useState('active');
-  useEffect(()=>{try{sessionStorage.setItem('studio-production-view',JSON.stringify(view))}catch{}},[view]);
+  const [view,setView]=useState(()=>{let saved;try{saved=JSON.parse(sessionStorage.getItem('studio-production-view')||'null')}catch{}if(initialView?.id&&data.batches.some(batch=>batch.id===initialView.id))return initialView;return saved?.mode==='detail'&&data.batches.some(batch=>batch.id===saved.id)?saved:{mode:'list'}}),[query,setQuery]=useState(''),[scent,setScent]=useState('all'),[stage,setStage]=useState('active');
+  useEffect(()=>{try{sessionStorage.setItem('studio-production-view',JSON.stringify(view.mode==='detail'?view:{mode:'list'}))}catch{}},[view]);
   const [open,setOpen]=useState(()=>new Set());
   const productions=data.productions||data.batches||[];
   const toggle=id=>setOpen(current=>{const next=new Set(current);if(next.has(id))next.delete(id);else next.add(id);return next});
