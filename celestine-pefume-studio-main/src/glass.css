@@ -1,4 +1,19 @@
 /* Shared glass surfaces adapt to every palette in themes.css. */
+/* Measurement sheets: names and quantities lead the visual hierarchy. */
+html body #root .formula-summary-heading h4{font-size:17px;font-weight:800;line-height:1.35}
+html body #root .formula-summary-ingredients{grid-template-columns:1fr;gap:10px}
+html body #root .formula-summary-ingredient{padding:16px;border-radius:14px}
+html body #root .formula-summary-row-top{gap:16px;align-items:center}
+html body #root .formula-summary-row-top strong{font-size:15px;font-weight:800;line-height:1.4;overflow-wrap:anywhere}
+html body #root .formula-summary-row-top span{font-size:18px;font-weight:850;padding:7px 12px;border-radius:10px;min-width:64px;text-align:center;font-variant-numeric:tabular-nums}
+html body #root .formula-summary-track{height:4px;margin:12px 0 0;opacity:.75}
+html body #root .formula-summary-quantity strong{font-size:24px;line-height:1.3}
+html body #root .bf-usage-row{padding:14px;border:1px solid var(--t-line2);border-radius:12px;background:var(--t-card);gap:10px}
+html body #root .bf-usage-name strong{font-size:15px;line-height:1.4;color:var(--t-ink);white-space:normal;overflow-wrap:anywhere}
+html body #root .bf-usage-name small,html body #root .bf-usage-planned{font-size:12px;color:var(--t-ink3);line-height:1.4}
+html body #root .bf-usage-amount input{font-size:22px;font-weight:850;min-height:48px;font-variant-numeric:tabular-nums;color:var(--t-ink);background:var(--t-soft)!important}
+html body #root .bf-usage-amount>span{font-size:14px;font-weight:800;color:var(--t-ink2)}
+html body #root .bf-usage-edit{min-width:44px;min-height:44px}
 /* Button groups have no enclosing panel; buttons retain their own surfaces. */
 html body #root :is(.bf-actions,.bd-actions,.access-actions,.backup-actions,.stock-entry-actions,.stock-row-actions,.material-dialog-actions,.formula-result-actions,.formula-view-actions,.saved-formula-actions,.bc-actions,.pricing-toolbar,.step-nav){background:transparent!important;background-image:none!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 html body #root :is(.bf-actions,.bd-actions,.access-actions,.backup-actions,.stock-entry-actions,.stock-row-actions,.material-dialog-actions,.formula-result-actions,.formula-view-actions,.saved-formula-actions,.bc-actions,.pricing-toolbar,.step-nav)::before,
