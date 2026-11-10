@@ -16,7 +16,7 @@ export default function CloudPinGate({children}){
   unlockKey().then(value=>{if(active){key=value;try{const saved=Number(sessionStorage.getItem(key)||0);if(saved>0)last=saved}catch{}}});
   const lock=()=>{if(key)try{sessionStorage.removeItem(key)}catch{}setDigits(['','','','']);setState('enter_pin');setError('Locked after 5 minutes of inactivity. Enter your PIN to continue.');};
   let persisted=0;
-  const persist=()=>{if(key&&last!==persisted)try{sessionStorage.setItem(key,String(last));persisted=last}catch{}};
+  const persist=()=>{if(key&&Date.now()-last<idleLimit&&last!==persisted)try{sessionStorage.setItem(key,String(last));persisted=last}catch{}};
   const activity=()=>{if(Date.now()-last>=idleLimit){lock();return}last=Date.now()};
   const check=()=>{if(Date.now()-last>=idleLimit)lock()};
   const events=['pointerdown','keydown','scroll','touchstart'];
