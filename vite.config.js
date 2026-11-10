@@ -4,7 +4,12 @@ import {VitePWA} from 'vite-plugin-pwa';
 
 const shortcut=(name,page)=>({name,short_name:name,url:`/?page=${encodeURIComponent(page)}`,icons:[{src:'/icon-192.png',sizes:'192x192',type:'image/png'}]});
 
-export default defineConfig({plugins:[react(),VitePWA({
+export default defineConfig({build:{rollupOptions:{output:{manualChunks(id){
+  if(!id.includes('node_modules'))return;
+  if(id.includes('@supabase'))return 'supabase';
+  if(id.includes('lucide-react'))return 'icons';
+  if(/[/\\](react|react-dom|scheduler)[/\\]/.test(id))return 'react';
+}}}},plugins:[react(),VitePWA({
   registerType:'prompt',
   includeAssets:['icon-192.png','icon-512.png','icon-maskable-512.png','apple-touch-icon.png','celestine-logo.jpg'],
   manifest:{
