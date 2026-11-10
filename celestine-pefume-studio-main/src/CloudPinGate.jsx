@@ -1,0 +1,17 @@
+import {useEffect,useState} from 'react';
+import './pin.css';
+import {supabase,signOut} from './supabase';
+export default function CloudPinGate({children}){
+ const[state,setState]=useState('loading'),[digits,setDigits]=useState(['','','','']),[confirmation,setConfirmation]=useState(''),[error,setError]=useState(''),[busy,setBusy]=useState(false),[attempts,setAttempts]=useState(0);
+ const call=async(action,pin)=>{const {data,error}=await supabase.rpc('pin_action',{action,supplied_pin:pin||null});if(error)throw error;return data};
+ const refresh=()=>call('status').then(data=>{setState(data.status);setAttempts(data.attempts||0)}).catch(err=>{setError(err.message);setState('error')});
+ useEffect(()=>{refresh()},[]);
+ if(state==='unlocked')return children;
+ const enter=async(value)=>{if(value.length!==4||busy)return;setError('');if(state==='setup'||state==='new_pin'){
+  if(value==='0000'){setDigits(['','','','']);return setError('Choose a PIN different from 0000.');}
+  if(!confirmation){setConfirmation(value);setDigits(['','','','']);return;}
+  if(value!==confirmation){setConfirmation('');setDigits(['','','','']);return setError('PINs did not match. Choose your PIN again.');}
+ }setBusy(true);try{const data=await call(state==='setup'||state==='new_pin'?'set_pin':'verify',value);setAttempts(data.attempts||0);if(data.status==='incorrect')setError('Incorrect PIN.');else setState(data.status);setDigits(['','','','']);setConfirmation('')}catch(err){setError(err.message)}finally{setBusy(false)}};
+ const locked=state==='locked'||state==='reset_requested';
+ return <main className="login-page"><section className="login-card"><p className="eyebrow">CELESTINE & CO.</p><h2>{locked?'Account locked':confirmation?'Confirm your new PIN':state==='setup'||state==='new_pin'?'Create your personal PIN':state==='temporary_pin'?'Enter temporary PIN 0000':'Enter your PIN'}</h2><p>{locked?'Request a reset and wait for master approval.':state==='loading'?'Checking account…':'Use four digits to continue.'}</p>{!locked&&state!=='loading'&&state!=='error'&&<div className="pin-boxes">{digits.map((digit,index)=><input key={index} aria-label={`PIN digit ${index+1}`} type="password" inputMode="numeric" maxLength={1} disabled={busy} value={digit} onChange={e=>{const next=[...digits];next[index]=e.target.value.replace(/\D/g,'').slice(-1);setDigits(next);if(next[index])e.target.nextElementSibling?.focus();enter(next.join(''))}} onKeyDown={e=>{if(e.key==='Backspace'){e.preventDefault();const next=[...digits],target=next[index]?index:Math.max(0,index-1);next[target]='';setDigits(next);if(target!==index)e.target.previousElementSibling?.focus()}}}/>)}</div>}{attempts>0&&<p>Incorrect attempts: {attempts}/5</p>}{locked&&<><button className="btn primary" disabled={busy||state==='reset_requested'} onClick={async()=>{setBusy(true);try{await call('request_reset');setState('reset_requested');setError('Request sent to the master.')}catch(err){setError(err.message)}finally{setBusy(false)}}}>Request PIN reset</button><button className="btn" onClick={refresh}>Check approval</button></>}{state==='error'&&<button className="btn" onClick={refresh}>Retry</button>}{error&&<p role="alert" className="warning">{error}</p>}<button className="btn" onClick={()=>signOut()}>Sign out</button></section></main>
+}
