@@ -50,6 +50,7 @@ function App({user,isMaster=false}){const[data,setData]=useState(null),[page,set
  useEffect(()=>{try{if(selected)localStorage.setItem(selectedFormulaKey,selected)}catch{}},[selected]);
  // An app shortcut opens /?page=Costing. Tidy the address bar once the page is chosen.
  useEffect(()=>{const url=new URL(location.href);url.searchParams.set('page',page);history.replaceState(null,'',url)},[page]);
+ useEffect(()=>{if(page!=='Costing')return;const warn=event=>{event.preventDefault();event.returnValue=''};window.addEventListener('beforeunload',warn);return()=>window.removeEventListener('beforeunload',warn)},[page]);
  // Personal appearance is isolated from shared workspace data.
  const [theme,setTheme]=useState(()=>readStoredTheme(user?.id)||defaultTheme);
  useEffect(()=>{applyTheme(theme,user?.id)},[theme,user?.id]);

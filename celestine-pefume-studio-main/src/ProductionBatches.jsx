@@ -28,6 +28,7 @@ export default function ProductionBatches({data,by='Local workspace',onChange,on
   const [view,setView]=useState(()=>{let saved;try{saved=JSON.parse(sessionStorage.getItem('studio-production-view')||'null')}catch{}if(initialView?.id&&data.batches.some(batch=>batch.id===initialView.id))return initialView;return saved?.mode==='detail'&&data.batches.some(batch=>batch.id===saved.id)?saved:{mode:'list'}}),[query,setQuery]=useState(''),[scent,setScent]=useState('all'),[stage,setStage]=useState('active');
   useEffect(()=>{try{sessionStorage.setItem('studio-production-view',JSON.stringify(view.mode==='detail'?view:{mode:'list'}))}catch{}},[view]);
   const [open,setOpen]=useState(()=>new Set());
+  useEffect(()=>{if(!['new','edit'].includes(view.mode))return;const warn=event=>{event.preventDefault();event.returnValue=''};window.addEventListener('beforeunload',warn);return()=>window.removeEventListener('beforeunload',warn)},[view.mode]);
   const productions=data.productions||data.batches||[];
   const toggle=id=>setOpen(current=>{const next=new Set(current);if(next.has(id))next.delete(id);else next.add(id);return next});
   const today=localDate();
