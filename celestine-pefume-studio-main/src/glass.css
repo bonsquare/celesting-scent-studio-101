@@ -1,4 +1,8 @@
 /* Shared glass surfaces adapt to every palette in themes.css. */
+html body #root .bc-actions{display:flex;flex-wrap:wrap;gap:10px;padding-top:12px}
+html body #root .bc-actions .btn{min-height:48px;padding:12px 18px;font-size:14px;font-weight:750;gap:8px;border-radius:13px;justify-content:center}
+html body #root .bc-actions .btn svg{width:19px;height:19px;flex-shrink:0}
+@media(max-width:520px){html body #root .bc-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}html body #root .bc-actions .btn{width:100%;min-width:0;padding:12px 10px}}
 /* Measurement sheets: names and quantities lead the visual hierarchy. */
 html body #root .formula-summary-heading h4{font-size:17px;font-weight:800;line-height:1.35}
 html body #root .formula-summary-ingredients{grid-template-columns:1fr;gap:10px}
