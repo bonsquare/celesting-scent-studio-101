@@ -49,7 +49,7 @@ function App({user,isMaster=false}){const[data,setData]=useState(null),[page,set
  useEffect(()=>{loadData().then(setData).catch(()=>setNotice('Could not open local storage. Check browser permissions.'));const a=()=>setOffline(!navigator.onLine);addEventListener('online',a);addEventListener('offline',a);const up=registerSW({onNeedRefresh(){setUpdate(()=>up)}});return()=>{removeEventListener('online',a);removeEventListener('offline',a)}},[]);
  useEffect(()=>{try{if(selected)localStorage.setItem(selectedFormulaKey,selected)}catch{}},[selected]);
  // An app shortcut opens /?page=Costing. Tidy the address bar once the page is chosen.
- useEffect(()=>{if(location.search.includes('page='))history.replaceState(null,'',location.pathname)},[]);
+ useEffect(()=>{const url=new URL(location.href);url.searchParams.set('page',page);history.replaceState(null,'',url)},[page]);
  // The color theme: your saved choice (synced with your data) wins; this device's last choice shows until data loads.
  const theme=isTheme(data?.settings?.theme)?data.settings.theme:readStoredTheme()||defaultTheme;
  useEffect(()=>{applyTheme(theme)},[theme]);

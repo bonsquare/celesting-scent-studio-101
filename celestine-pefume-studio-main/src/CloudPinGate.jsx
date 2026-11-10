@@ -2,12 +2,26 @@ import {useEffect,useState} from 'react';
 import './pin.css';
 import {supabase,signOut} from './supabase';
 async function unlockKey(){const{data}=await supabase.auth.getSession();const session=data.session;if(!session)return null;try{const payload=JSON.parse(atob(session.access_token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));return payload.session_id?`studio-pin:${session.user.id}:${payload.session_id}`:null}catch{return null}}
-async function rememberUnlock(){const key=await unlockKey();if(key)try{sessionStorage.setItem(key,'unlocked')}catch{/* Storage is optional. */}}
+const idleLimit=5*60*1000;
+async function rememberUnlock(){const key=await unlockKey();if(key)try{sessionStorage.setItem(key,String(Date.now()))}catch{/* Storage is optional. */}}
 export default function CloudPinGate({children}){
  const[state,setState]=useState('loading'),[digits,setDigits]=useState(['','','','']),[confirmation,setConfirmation]=useState(''),[error,setError]=useState(''),[busy,setBusy]=useState(false),[attempts,setAttempts]=useState(0);
  const call=async(action,pin)=>{const {data,error}=await supabase.rpc('pin_action',{action,supplied_pin:pin||null});if(error)throw error;return data};
- const refresh=()=>call('status').then(async data=>{const key=await unlockKey();let remembered=false;try{remembered=key&&sessionStorage.getItem(key)==='unlocked';if(key&&data.status!=='enter_pin')sessionStorage.removeItem(key)}catch{/* Storage is optional. */}setState(data.status==='enter_pin'&&remembered?'unlocked':data.status);setAttempts(data.attempts||0)}).catch(err=>{setError(err.message);setState('error')});
+ const refresh=()=>call('status').then(async data=>{const key=await unlockKey();let remembered=false;try{remembered=key&&Date.now()-Number(sessionStorage.getItem(key)||0)<idleLimit;if(key&&data.status!=='enter_pin')sessionStorage.removeItem(key)}catch{/* Storage is optional. */}setState(data.status==='enter_pin'&&remembered?'unlocked':data.status);setAttempts(data.attempts||0)}).catch(err=>{setError(err.message);setState('error')});
  useEffect(()=>{refresh()},[]);
+ useEffect(()=>{
+  if(state!=='unlocked')return;
+  let last=Date.now(),key=null,active=true;
+  unlockKey().then(value=>{if(active)key=value});
+  const lock=()=>{if(key)try{sessionStorage.removeItem(key)}catch{}setDigits(['','','','']);setState('enter_pin');setError('Locked after 5 minutes of inactivity. Enter your PIN to continue.');};
+  const activity=()=>{if(Date.now()-last>=idleLimit){lock();return}last=Date.now();if(key)try{sessionStorage.setItem(key,String(last))}catch{}};
+  const check=()=>{if(Date.now()-last>=idleLimit)lock()};
+  const events=['pointerdown','keydown','scroll','touchstart'];
+  events.forEach(event=>window.addEventListener(event,activity,{passive:true}));
+  document.addEventListener('visibilitychange',check);
+  const timer=setInterval(check,1000);
+  return()=>{active=false;clearInterval(timer);events.forEach(event=>window.removeEventListener(event,activity));document.removeEventListener('visibilitychange',check)};
+ },[state]);
  if(state==='unlocked')return children;
  const enter=async(value)=>{if(value.length!==4||busy)return;setError('');if(state==='setup'||state==='new_pin'){
   if(value==='0000'){setDigits(['','','','']);return setError('Choose a PIN different from 0000.');}
