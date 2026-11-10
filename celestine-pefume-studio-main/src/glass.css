@@ -201,6 +201,12 @@ body{background:radial-gradient(circle at 4% 8%,color-mix(in srgb,var(--t-brand)
 #root .formula-summary-track i.oil{background:linear-gradient(90deg,#d86b68,#f5a06c)}
 
 /* Keep the enhanced visual language consistent when any theme is selected. */
+#root .bc-filters .bc-search{height:42px;min-width:0;padding:0 12px;gap:9px;background:var(--glass-input);box-sizing:border-box;overflow:hidden}
+#root .bc-search>svg{flex:0 0 16px;color:var(--t-ink3)}
+#root .bc-search input{width:100%;height:100%;min-height:0;padding:0;border:0;border-radius:0;background:transparent!important;box-shadow:none;outline:none;font-size:14px;color:var(--t-ink)}
+#root .bc-search:focus-within{outline:2px solid var(--t-brand);outline-offset:2px}
+#root .bc-search input:focus-visible{outline:none}
+#root .bc-filters select{height:42px;min-width:0;font-size:13px}
 #root .dashboard-hero{
   background:linear-gradient(120deg,var(--t-ink2),var(--t-brand2) 56%,var(--t-brand));
   border:1px solid color-mix(in srgb,var(--t-card) 34%,transparent);
