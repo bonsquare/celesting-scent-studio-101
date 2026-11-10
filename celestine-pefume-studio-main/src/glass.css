@@ -201,6 +201,22 @@ body{background:radial-gradient(circle at 4% 8%,color-mix(in srgb,var(--t-brand)
 #root .formula-summary-track i.oil{background:linear-gradient(90deg,#d86b68,#f5a06c)}
 
 /* Keep the enhanced visual language consistent when any theme is selected. */
+/* Formula summaries use the selected palette throughout, including dark themes. */
+#root .formula-summary-banner{background:linear-gradient(120deg,var(--t-soft),var(--t-tint));border-color:var(--t-line2);box-shadow:0 8px 24px #17233d18,inset 0 1px #ffffff30;color:var(--t-ink)}
+#root .formula-summary-banner .formula-summary-name{color:var(--t-ink);border-bottom-color:var(--t-brand);text-shadow:none}
+#root .formula-summary-banner .eyebrow,#root .formula-summary-banner .formula-summary-total small{color:var(--t-ink3)}
+#root .formula-summary-banner .formula-summary-total strong,#root .formula-summary-scent dd{color:var(--t-ink)}
+#root .formula-summary-scent dt{color:var(--t-ink3)}
+#root .formula-summary-identity>span,#root .formula-summary-banner .formula-summary-concentration{background:var(--t-card);color:var(--t-ink2);border-color:var(--t-line2)}
+#root .formula-summary-banner .formula-summary-concentration small{color:var(--t-ink3)}
+#root .formula-summary-banner button.summary-print-button.btn{background:var(--t-card);color:var(--t-ink2);border-color:var(--t-line2)}
+#root .formula-summary-section{background:var(--t-card);backdrop-filter:none;-webkit-backdrop-filter:none}
+#root .formula-summary-section .formula-summary-ingredient{background:var(--t-soft);border-color:var(--t-line)}
+#root .formula-summary-row-top strong{color:var(--t-ink)}
+#root .formula-summary-row-top span{background:var(--t-tint);color:var(--t-ink2)}
+#root .formula-summary-track{background:var(--t-line)}
+#root .formula-summary-track i,#root .formula-summary-track i.oil{background:var(--t-brand)}
+#root .formula-summary-date{color:var(--t-ink3)}
 #root .bc-filters .bc-search{height:42px;min-width:0;padding:0 12px;gap:9px;background:var(--glass-input);box-sizing:border-box;overflow:hidden}
 #root .bc-search>svg{flex:0 0 16px;color:var(--t-ink3)}
 #root .bc-search input{width:100%;height:100%;min-height:0;padding:0;border:0;border-radius:0;background:transparent!important;box-shadow:none;outline:none;font-size:14px;color:var(--t-ink)}
