@@ -23,6 +23,7 @@ export function readStoredTheme(){try{const id=localStorage.getItem(themeKey);re
 export function applyTheme(id){
   const theme=themes.find(item=>item.id===id)||themes[0];
   document.documentElement.dataset.theme=theme.id;
+  document.documentElement.dataset.appearance=theme.dark?'dark':'light';
   document.documentElement.style.colorScheme=theme.dark?'dark':'light';
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content',theme.bar);
   try{localStorage.setItem(themeKey,theme.id)}catch{/* remembering is optional */}

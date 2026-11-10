@@ -1,4 +1,19 @@
 /* Shared glass surfaces adapt to every palette in themes.css. */
+/* Semantic surfaces keep theme accents distinct from readable data surfaces. */
+:root{--ui-success-bg:#e5f5ed;--ui-success-ink:#176344;--ui-warning-bg:#fff0d2;--ui-warning-ink:#80500d;--ui-danger-bg:#ffe9eb;--ui-danger-ink:#a42e43}
+html[data-appearance="dark"]{--ui-success-bg:#183e35;--ui-success-ink:#9ee5c6;--ui-warning-bg:#473720;--ui-warning-ink:#ffdc99;--ui-danger-bg:#482735;--ui-danger-ink:#ffb6c4}
+html body #root :is(.pricing-tier-editor,.pricing-tier-editor-group,.formula-summary-section,.material-record,.inventory-card,.saved-formula,.theme-card){background:var(--t-card);color:var(--t-ink);border-color:var(--t-line)}
+html body #root :is(.pricing-tier-editor-group h4,.formula-summary-heading h4,.material-record-name strong,.saved-formula-name strong){color:var(--t-ink)}
+html body #root :is(.sidebar nav button.active,.bottom-nav button.active,.status-chips button.active,.formula-basis button.active){background:var(--t-tint);color:var(--t-ink);border-color:var(--t-line2)}
+html body #root :is(input,select,textarea){color:var(--t-ink);border-color:var(--t-line2)}
+html body #root input::placeholder,html body #root textarea::placeholder{color:var(--t-muted);opacity:1}
+html body #root :is(.access-badge.master,.access-badge.approved,.user-settings-notice,.backup-message,.structure-note){background:var(--ui-success-bg);color:var(--ui-success-ink)!important}
+html body #root :is(.access-badge.pending,.tier-warn,.pricing-warnings p){background:var(--ui-warning-bg);color:var(--ui-warning-ink)!important}
+html body #root :is(.access-badge.rejected,.material-error,.formula-error){background:var(--ui-danger-bg);color:var(--ui-danger-ink)!important}
+html body #root .formula-summary-highlights>div:first-child{background:var(--ui-success-bg);border-color:var(--t-line)}
+html body #root .formula-summary-highlights>div:first-child :is(span,strong,small){color:var(--ui-success-ink)}
+html body #root .formula-summary-highlights>div+div{background:var(--ui-warning-bg);border-color:var(--t-line)}
+html body #root .formula-summary-highlights>div+div :is(span,strong,small){color:var(--ui-warning-ink)}
 #root .access-list{gap:8px}
 #root .access-row{padding:10px 12px;min-height:64px;gap:10px;border-radius:13px}
 #root .access-row .access-identity{display:flex;flex-direction:row;align-items:center;gap:10px;min-width:0}
