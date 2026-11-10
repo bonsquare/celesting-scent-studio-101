@@ -7,7 +7,7 @@ async function rememberUnlock(){const key=await unlockKey();if(key)try{sessionSt
 export default function CloudPinGate({children}){
  const[state,setState]=useState('loading'),[digits,setDigits]=useState(['','','','']),[confirmation,setConfirmation]=useState(''),[error,setError]=useState(''),[busy,setBusy]=useState(false),[attempts,setAttempts]=useState(0);
  const call=async(action,pin)=>{const {data,error}=await supabase.rpc('pin_action',{action,supplied_pin:pin||null});if(error)throw error;return data};
- const refresh=()=>call('status').then(async data=>{const key=await unlockKey();let remembered=false;try{remembered=key&&Date.now()-Number(sessionStorage.getItem(key)||0)<idleLimit;if(key&&data.status!=='enter_pin')sessionStorage.removeItem(key)}catch{/* Storage is optional. */}setState(data.status==='enter_pin'&&remembered?'unlocked':data.status);setAttempts(data.attempts||0)}).catch(err=>{setError(err.message);setState('error')});
+ const refresh=()=>call('status').then(data=>{setState(data.status);setAttempts(data.attempts||0)}).catch(err=>{setError(err.message);setState('error')});
  useEffect(()=>{refresh()},[]);
  useEffect(()=>{if(!busy&&digits.every(digit=>digit==='')&&['enter_pin','setup','new_pin','temporary_pin'].includes(state))document.querySelector('.login-page .pin-boxes input')?.focus()},[digits,busy,state]);
  useEffect(()=>{
@@ -24,8 +24,13 @@ export default function CloudPinGate({children}){
   document.addEventListener('visibilitychange',check);
   window.addEventListener('studio-lock',lock);
   const timer=setInterval(()=>{check();persist()},1000);
+  let lastSent=last,pending=false;
+  const heartbeat=setInterval(async()=>{if(pending||last<=lastSent||Date.now()-last>=idleLimit)return;pending=true;const activityAt=last;try{const result=await call('touch');if(active){if(result.status!=='unlocked')lock();else lastSent=activityAt}}catch{/* Retry while the local idle deadline still applies. */}finally{pending=false}},15000);
+  const manualLock=()=>{lock();call('lock').catch(()=>{})};
+  window.removeEventListener('studio-lock',lock);
+  window.addEventListener('studio-lock',manualLock);
   window.addEventListener('pagehide',persist);
-  return()=>{active=false;clearInterval(timer);events.forEach(event=>window.removeEventListener(event,activity,true));document.removeEventListener('visibilitychange',check);window.removeEventListener('studio-lock',lock);window.removeEventListener('pagehide',persist)};
+  return()=>{active=false;clearInterval(timer);clearInterval(heartbeat);events.forEach(event=>window.removeEventListener(event,activity,true));document.removeEventListener('visibilitychange',check);window.removeEventListener('studio-lock',manualLock);window.removeEventListener('pagehide',persist)};
  },[state]);
  if(state==='unlocked')return children;
  if(state==='loading')return <div className="loading" role="status"><img className="loading-logo" src="/celestine-logo.jpg" alt="Celestine & Co." width="84" height="84"/><span>Refreshing your workspace…</span></div>;
