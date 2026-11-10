@@ -17,8 +17,8 @@
 @media(max-width:900px),(hover:none) and (pointer:coarse){
  html body #root :is(.card,.cost-card,.stat,.dashboard-metric,.production-record,.formula-window,.material-dialog,.sheet,.costing-current,.costing-steps,.bf-steps,.bf-group,.pricing-tier,.pricing-tier-editor-group,.topbar,.sidebar,.bottom-nav,input,select,textarea,.theme-row,.theme-toggle){
   backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
-  background:var(--t-card)!important;
-  box-shadow:0 2px 8px #17233d0c!important;
+  background:linear-gradient(145deg,#ffffff20,transparent 65%),color-mix(in srgb,var(--t-card) 94%,transparent)!important;
+  box-shadow:0 3px 10px #17233d0c,inset 0 1px #ffffff55!important;
  }
  html body::before,html body::after,html #root .shell::before,html #root .shell::after,
  html #root .card::before,html #root .card::after,html #root .sheet::before,html #root .sheet::after{display:none!important}
@@ -59,8 +59,8 @@ body{background:radial-gradient(circle at 4% 8%,color-mix(in srgb,var(--t-brand)
   background:var(--glass-sheen),var(--glass-panel);
   border:1px solid var(--glass-line);
   box-shadow:var(--glass-shadow);
-  backdrop-filter:blur(30px) saturate(165%);
-  -webkit-backdrop-filter:blur(30px) saturate(165%);
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
 }
 #root .card,#root .cost-card,#root .production-record{border-radius:22px}
 
@@ -75,8 +75,8 @@ body{background:radial-gradient(circle at 4% 8%,color-mix(in srgb,var(--t-brand)
   background:var(--glass-soft);
   border-color:var(--glass-line);
   box-shadow:inset 0 1px var(--glass-edge),0 8px 20px #1d244b10;
-  backdrop-filter:blur(20px) saturate(145%);
-  -webkit-backdrop-filter:blur(20px) saturate(145%);
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
 }
 #root .pricing-tier[open],#root .pricing-tier-editor-group{background:var(--glass-raised)}
 #root .pricing-tier:first-of-type{background:color-mix(in srgb,var(--t-tint) 69%,transparent)}
@@ -88,8 +88,8 @@ body{background:radial-gradient(circle at 4% 8%,color-mix(in srgb,var(--t-brand)
   background:var(--glass-sheen),var(--glass-raised);
   border-color:var(--glass-line);
   box-shadow:0 8px 26px #1d244b14,inset 0 1px var(--glass-edge);
-  backdrop-filter:blur(32px) saturate(175%);
-  -webkit-backdrop-filter:blur(32px) saturate(175%);
+  backdrop-filter:blur(12px) saturate(125%);
+  -webkit-backdrop-filter:blur(12px) saturate(125%);
 }
 #root .bottom-nav{box-shadow:0 -8px 30px #1d244b1a,inset 0 1px var(--glass-edge)}
 #root .bottom-nav button.active,#root .sidebar nav button.active{
