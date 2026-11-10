@@ -1,13 +1,13 @@
 /* Theme variables. Every color in style.css comes from these. The default is Soft Pastel. */
 :root,html[data-theme="pastel"]{
-  --t-page:linear-gradient(165deg,#f4eeff 0%,#fdeef5 48%,#eaf8f1 100%);
-  --t-card:#ffffff;--t-card-a:#ffffffd9;--t-glass:#ffffffcc;
-  --t-ink:#2f2d58;--t-ink2:#4d4a96;--t-ink3:#6a6690;--t-muted:#76729a;
-  --t-brand:#8b93f2;--t-brand2:#b69af2;
-  --t-btn:linear-gradient(135deg,#8b93f2,#b69af2);--t-btn-ink:#ffffff;
-  --t-soft:#fbf8ff;--t-tint:#efeaff;--t-line:#e8e2f5;--t-line2:#cfc8f0;
-  --t-chip:#8b93f2;--t-chip-ink:#ffffff;
-  --t-c-total:#f1edff;--t-c-mac:#fff1e6;--t-c-mat:#eaf4ff;--t-c-ready:#eafaf1;--t-c-hold:#fff0f4;
+  --t-page:linear-gradient(160deg,#fff6e8 0%,#fff0e8 47%,#eaf4ff 100%);
+  --t-card:#fffdf9;--t-card-a:#fffdf9e8;--t-glass:#fffdf9cc;
+  --t-ink:#172f55;--t-ink2:#214b80;--t-ink3:#526d91;--t-muted:#71849d;
+  --t-brand:#e58b1f;--t-brand2:#f7bb4b;
+  --t-btn:linear-gradient(135deg,#e58b1f,#f7bb4b);--t-btn-ink:#fffaf0;
+  --t-soft:#fff8ed;--t-tint:#ffe5b5;--t-line:#f0dcc2;--t-line2:#e4bd83;
+  --t-chip:#e58b1f;--t-chip-ink:#fffaf0;
+  --t-c-total:#fff0c9;--t-c-mac:#ffe8dc;--t-c-mat:#e6f2ff;--t-c-ready:#e6f7ee;--t-c-hold:#ffe5eb;
 }
 html[data-theme="steel"]{
   --t-page:linear-gradient(170deg,#08101d 0%,#0d1a2e 55%,#101f36 100%);
