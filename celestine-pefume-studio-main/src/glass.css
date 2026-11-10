@@ -199,3 +199,19 @@ body{background:radial-gradient(circle at 4% 8%,color-mix(in srgb,var(--t-brand)
 #root .formula-summary-ingredient{background:linear-gradient(135deg,#fffaf0,#fff1d9);border-color:#f2d6a8}
 #root .formula-summary-track i{background:linear-gradient(90deg,#e58b1f,#ffd36f)}
 #root .formula-summary-track i.oil{background:linear-gradient(90deg,#d86b68,#f5a06c)}
+
+/* Keep the enhanced visual language consistent when any theme is selected. */
+#root .dashboard-hero{
+  background:linear-gradient(120deg,var(--t-ink2),var(--t-brand2) 56%,var(--t-brand));
+  border:1px solid color-mix(in srgb,var(--t-card) 34%,transparent);
+  box-shadow:0 18px 38px color-mix(in srgb,var(--t-brand) 24%,transparent),inset 0 1px #ffffff52;
+}
+#root .dashboard-hero .eyebrow,#root .dashboard-hero p:last-child{color:color-mix(in srgb,var(--t-card) 82%,white)}
+#root .formula-summary-highlights>div,
+#root .formula-summary-section,
+#root .formula-summary-ingredient{
+  border-color:color-mix(in srgb,var(--t-brand) 20%,var(--t-line));
+}
+#root .formula-summary-highlights>div:first-child{background:linear-gradient(135deg,color-mix(in srgb,#dff7ec 75%,var(--t-card)),var(--t-card))}
+#root .formula-summary-highlights>div+div{background:linear-gradient(135deg,color-mix(in srgb,#fff0d0 75%,var(--t-card)),var(--t-card))}
+#root .btn.primary{background:var(--t-btn);color:var(--t-btn-ink);border-color:color-mix(in srgb,var(--t-brand) 55%,white)}
