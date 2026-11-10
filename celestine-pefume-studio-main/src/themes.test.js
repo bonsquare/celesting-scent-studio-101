@@ -1,10 +1,16 @@
 import {describe,expect,it} from 'vitest';
 import {readFileSync} from 'node:fs';
-import {defaultTheme,isTheme,themes} from './themes';
+import {defaultTheme,isTheme,themes,readStoredTheme,themeKey} from './themes';
 
 const css=readFileSync(new URL('./themes.css',import.meta.url),'utf8');
 
 describe('color themes',()=>{
+  it('reads isolated account preferences instead of the shared browser theme',()=>{
+    const previous=globalThis.localStorage;
+    const values=new Map([[themeKey,'grove'],[`${themeKey}:alice`,'night'],[`${themeKey}:bob`,'sky']]);
+    globalThis.localStorage={getItem:key=>values.get(key)||null};
+    try{expect(readStoredTheme('alice')).toBe('night');expect(readStoredTheme('bob')).toBe('sky');expect(readStoredTheme('new-user')).toBe(defaultTheme)}finally{if(previous===undefined)delete globalThis.localStorage;else globalThis.localStorage=previous}
+  });
   it('has unique ids, a default, and four swatches each',()=>{
     expect(new Set(themes.map(theme=>theme.id)).size).toBe(themes.length);
     expect(isTheme(defaultTheme)).toBe(true);
