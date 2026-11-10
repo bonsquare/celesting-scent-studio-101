@@ -1,4 +1,17 @@
 /* Shared glass surfaces adapt to every palette in themes.css. */
+/* Avoid repeatedly compositing layered glass while scrolling on phones. */
+@media(max-width:900px),(hover:none) and (pointer:coarse){
+ html body #root :is(.card,.cost-card,.stat,.dashboard-metric,.production-record,.formula-window,.material-dialog,.sheet,.costing-current,.costing-steps,.bf-steps,.bf-group,.pricing-tier,.pricing-tier-editor-group,.topbar,.sidebar,.bottom-nav,input,select,textarea,.theme-row,.theme-toggle){
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+  background:var(--t-card)!important;
+  box-shadow:0 2px 8px #17233d0c!important;
+ }
+ html body::before,html body::after,html #root .shell::before,html #root .shell::after,
+ html #root .card::before,html #root .card::after,html #root .sheet::before,html #root .sheet::after{display:none!important}
+ html #root *,html #root *::before,html #root *::after{animation:none!important;transition:none!important}
+ html body{background-attachment:scroll!important}
+ html #root .dashboard-metric:hover{transform:none!important}
+}
 :root{
   --glass-panel:color-mix(in srgb,var(--t-card) 54%,transparent);
   --glass-raised:color-mix(in srgb,var(--t-card) 68%,transparent);
