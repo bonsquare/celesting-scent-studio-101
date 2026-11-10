@@ -9,6 +9,7 @@ export default function CloudPinGate({children}){
  const call=async(action,pin)=>{const {data,error}=await supabase.rpc('pin_action',{action,supplied_pin:pin||null});if(error)throw error;return data};
  const refresh=()=>call('status').then(async data=>{const key=await unlockKey();let remembered=false;try{remembered=key&&Date.now()-Number(sessionStorage.getItem(key)||0)<idleLimit;if(key&&data.status!=='enter_pin')sessionStorage.removeItem(key)}catch{/* Storage is optional. */}setState(data.status==='enter_pin'&&remembered?'unlocked':data.status);setAttempts(data.attempts||0)}).catch(err=>{setError(err.message);setState('error')});
  useEffect(()=>{refresh()},[]);
+ useEffect(()=>{if(!busy&&digits.every(digit=>digit==='')&&['enter_pin','setup','new_pin','temporary_pin'].includes(state))document.querySelector('.login-page .pin-boxes input')?.focus()},[digits,busy,state]);
  useEffect(()=>{
   if(state!=='unlocked')return;
   let last=Date.now(),key=null,active=true;
