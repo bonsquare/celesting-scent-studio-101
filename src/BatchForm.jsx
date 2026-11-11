@@ -22,7 +22,7 @@ function FormulaDetails({formula,data,referenceVolume,targetVolume,targetUnit}){
 
 function UsageRow({row,planned,editing,onChange,onToggle}){
   return <div className="bf-usage-row">
-    <div className="bf-usage-name"><strong>{row.name}</strong><small>{num(planned?.percentage).toFixed(2)}% of formula{row.density>0&&` · Density ${num(row.density).toFixed(2)} g/mL`}</small></div>
+    <div className="bf-usage-name"><strong>{row.name}</strong><small>{num(planned?.percentage).toFixed(2)}% of formula</small>{row.density>0&&<small>Density {num(row.density).toFixed(2)} g/mL</small>}</div>
     <div className="bf-usage-amount"><input aria-label={`Quantity used for ${row.name} in ${row.unit}`} readOnly={!editing} type="number" min="0" step="any" value={row.quantity} onChange={event=>onChange(event.target.value)}/><span>{row.unit}</span></div>
     <button type="button" className="bf-usage-edit" aria-label={`${editing?'Save':'Edit'} quantity for ${row.name}`} onClick={event=>onToggle(row.materialId,event.currentTarget)}>{editing?<Check size={16}/>:<Pencil size={16}/>}</button>
     <small className="bf-usage-planned">Planned {num(planned?.quantity).toFixed(2)} {row.unit}</small>
