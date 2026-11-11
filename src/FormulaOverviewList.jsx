@@ -6,7 +6,20 @@ const Stat=({label,value})=><div className="stat"><span>{label}</span><strong>{v
 const visibleCount=4;
 
 function FormulaOverviewCard({formula,data,isCurrent,onManage}){
-  const overview=useMemo(()=>formulaOverview(formula,calculate(formula,data)),[formula,data]);
+  const overview=useMemo(()=>{
+    const production=(data.productions||[])
+      .filter(item=>item.formulaId===formula.id)
+      .sort((a,b)=>(b.updatedAt||b.createdAt||'').localeCompare(a.updatedAt||a.createdAt||''))[0];
+    const costing=production&&(data.costings||[]).find(item=>item.productionId===production.id);
+    const liveForm={
+      ...formula,
+      ...(costing?.draft||{}),
+      nominalVolume:production?.actualYield||production?.targetAmount||formula.nominalVolume,
+      costingBottleSize:costing?.draft?.costingBottleSize??production?.bottleSize??formula.costingBottleSize,
+      bottles:production?.bottles||formula.bottles,
+    };
+    return formulaOverview(liveForm,calculate(liveForm,data));
+  },[formula,data]);
   return <section className={`card formula-overview-card${isCurrent?' current':''}`}>
     <div className="formula-overview-head">
       <div className="formula-overview-title"><strong className="dashboard-formula-name">{formula.name}</strong>{formula.code&&<span className="formula-code-tag">{formula.code}</span>}{isCurrent&&<span className="current-tag">Current</span>}</div>
