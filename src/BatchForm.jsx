@@ -94,7 +94,7 @@ export default function BatchForm({data,batch,onSave,onCancel}){
       </div>
     </details>}
     {step===1&&<section className="bf-group bf-material-step"><h3>Materials to measure</h3>
-<div className="bf-wide bf-measure-panel"><div className="bf-usage-concentration"><div><span>Target volume to make</span><strong>{targetVolume.toFixed(2)} {f.targetUnit}</strong><small>For this production batch</small></div><div><span>Fragrance concentration</span><strong>{oilPercentage.toFixed(2)}%</strong><small>Based on the selected formula</small></div></div>
+<div className="bf-wide bf-measure-panel"><div className="bf-usage-concentration"><div><span>Target volume to make</span><strong>{targetVolume.toFixed(2)} {f.targetUnit}</strong><small>For this production batch</small></div></div>
 <div className="bf-wide bf-usage-block"><p>Quantities for this batch. Use the pencil to adjust an amount actually used.</p><div className="bf-material-usage">{[['Fragrance oil',oilUsage],['Other raw materials',otherUsage]].map(([title,rows])=>rows.length>0&&<section className="bf-usage-group" key={title}><h4>{title}</h4>{rows.map(row=><UsageRow key={row.materialId} row={row} planned={plannedUsage.find(item=>item.materialId===row.materialId)} editing={editingUsage.has(row.materialId)} onChange={value=>set({actualMaterialUsage:usage.map(item=>item.materialId===row.materialId?{...item,quantity:value}:item)})} onToggle={toggleUsageEdit}/>)}</section>)}</div></div></div><label className="bf-wide"><span>Production notes (optional)</span><textarea rows="2" value={f.notes} onChange={event=>set({notes:event.target.value})}/></label>
     </section>}
     {step===2&&<>
