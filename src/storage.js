@@ -5,15 +5,20 @@ import {collapsePriceHistory} from './pricing';
 import {migrateBatches,normalizeCostings} from './migration';
 import {supabase,supabaseConfigured} from './supabase';
 const db=()=>openDB('perfume-studio',1,{upgrade(database){if(!database.objectStoreNames.contains('app'))database.createObjectStore('app')}});
+const withTimeout=(promise,ms)=>Promise.race([promise,new Promise(resolve=>setTimeout(()=>resolve({timeout:true}),ms))]);
 export function normalizeData(saved){const data={...structuredClone(initial),...saved};data.ingredients=(data.ingredients||[]).map(x=>{const material={...(x.contentQuantity!==undefined?x:{...x,contentQuantity:1,contentUnit:'mL',purchasePrice:x.unitCost??0}),category:x.category||inferMaterialCategory(x.name),supplier:x.supplier||'',make:x.make||''};return {...material,stockQuantity:material.stockQuantity??material.contentQuantity,reorderLevel:material.reorderLevel??numOrZero(material.contentQuantity)*.2}});data.formulas=(data.formulas||[]).map(f=>({...f,formulationOnly:true,targetAmount:null,summarySnapshot:f.summarySnapshot?{...f.summarySnapshot,formula:{...(f.summarySnapshot.formula||{}),formulationOnly:true}}:f.summarySnapshot,ingredients:(f.ingredients||[]).map(x=>x.materialId?x:{...x,materialId:data.ingredients.find(m=>m.name===x.name)?.id})}));data.formulas=withFormulaCodes(data.formulas).map(collapsePriceHistory);const legacy=data.productions||data.batches||[];data.productions=migrateBatches(legacy,data.formulas).map(batch=>({...batch,status:batch.status||'Completed',expectedYield:batch.expectedYield??batch.calculation?.volume,actualYield:batch.actualYield??batch.calculation?.volume,inventoryDeducted:batch.inventoryDeducted??true}));data.batches=data.productions;data.costings=normalizeCostings(data.costings||[]);return data}
 const numOrZero=value=>Number.isFinite(Number(value))?Number(value):0;
 export {supabaseConfigured};
 export async function loadData(){
  const d=await db(),local=normalizeData(await d.get('app','data')||initial);
  if(!supabase)return local;
- const {data:{user}}=await supabase.auth.getUser();
+ const auth=await withTimeout(supabase.auth.getUser(),5000);
+ if(auth?.timeout)return local;
+ const {data:{user}}=auth;
  if(!user)return local;
- const {data:row,error}=await supabase.from('shared_workspace').select('data').eq('workspace_id','celestine').maybeSingle();
+ const remote=await withTimeout(supabase.from('shared_workspace').select('data').eq('workspace_id','celestine').maybeSingle(),5000);
+ if(remote?.timeout)return local;
+ const {data:row,error}=remote;
  if(error)throw new Error(`Supabase load failed: ${error.message}`);
  if(row?.data){const cloud=normalizeData(row.data);await d.put('app',cloud,'data');return cloud}
  const {error:seedError}=await supabase.from('shared_workspace').insert({workspace_id:'celestine',data:local});
