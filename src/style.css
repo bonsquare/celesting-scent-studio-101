@@ -937,6 +937,9 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 
 /* Saved price date: one horizontal line across the bottom of the record */
 #root .pricing-history-card .record-saved{grid-column:1/-1;margin:.1rem 0 0;padding-top:.45rem;border-top:1px dashed var(--t-tint);font-size:.72rem;color:var(--t-muted);white-space:nowrap}
+#root .pricing-history-card .saved-price-open{display:inline-flex;align-items:center;gap:.4rem;width:max-content;max-width:100%;padding:.35rem .55rem;border:1px solid #b9aef2;border-radius:8px;background:#eeeafd;color:#5146a7;font-weight:800;text-align:left;cursor:pointer}
+#root .pricing-history-card .saved-price-open:hover,#root .pricing-history-card .saved-price-open[aria-expanded=true]{background:#ddd6ff;border-color:#8275e8;box-shadow:0 2px 8px #8275e830}
+#root .pricing-history-card .saved-price-open small{color:#5146a7;font-size:.62rem;font-weight:800}
 
 /* Dashboard banner: greeting, what needs attention, quick actions */
 .dashboard-banner .dashboard-hero-copy h2{margin:.1rem 0 .15rem}
