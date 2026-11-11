@@ -1171,6 +1171,7 @@ button.banner-chip:focus-visible{outline:2px solid #fff;outline-offset:2px}
 #root .bf-production-info .bf-material-usage{padding:.5rem;gap:.35rem}
 #root .bf-production-info .bf-material-usage .bf-usage-row{padding:.4rem .5rem}
 #root .bf-usage-concentration{display:flex;align-items:baseline;flex-wrap:wrap;gap:.2rem .5rem;padding:.55rem .7rem;border:1px solid #d8d0fa;border-radius:10px;background:#f6f3ff;color:#5146a7}
+#root .bf-usage-concentration{border:2px solid var(--t-brand);background:linear-gradient(135deg,#eef4ff,#f5f2ff);box-shadow:0 4px 14px #356fe326}
 #root .bf-usage-concentration>span{font-size:.73rem;font-weight:800}
 #root .bf-usage-concentration strong{margin-left:auto;font-size:.88rem;font-variant-numeric:tabular-nums}
 #root .bf-usage-concentration small{flex-basis:100%;font-size:.65rem;color:var(--t-muted)}
