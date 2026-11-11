@@ -6,6 +6,7 @@ const Stat=({label,value})=><div className="stat"><span>{label}</span><strong>{v
 const visibleCount=4;
 
 function FormulaOverviewCard({formula,data,isCurrent,onManage}){
+  const percentageOnly=formula.formulationOnly||formula.targetAmount==null;
   const overview=useMemo(()=>{
     const production=(data.productions||[])
       .filter(item=>item.formulaId===formula.id)
@@ -28,7 +29,7 @@ function FormulaOverviewCard({formula,data,isCurrent,onManage}){
     {!overview.hasBottle&&<p className="overview-note">Choose a bottle size in Costing to see the cost per finished bottle and the suggested price.</p>}
     <details className="overview-disclosure"><summary>Details</summary>
       <div className="dashboard-formula-stats overview-stats">
-        <Stat label={formula.formulationOnly?'Formula basis':'Batch volume'} value={formula.formulationOnly?'Percentage based':`${overview.volume.toFixed(1)} ML`}/>
+        <Stat label={percentageOnly?'Formula basis':'Batch volume'} value={percentageOnly?'Percentage based':`${overview.volume.toFixed(1)} ML`}/>
         <Stat label="Raw material cost" value={money(overview.rawMaterialCost)}/>
         <Stat label="Cost of production" value={money(overview.costOfProduction)}/>
         <Stat label="Cost per bottle (finished)" value={overview.hasBottle?money(overview.costPerBottle):'Not set'}/>
