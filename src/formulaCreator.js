@@ -4,7 +4,7 @@ export function withFormulaCreator(formula,user){
 }
 
 export function creatorLabel(creator){
- return creator?.name||'Unknown creator';
+ return typeof creator==='string'?creator.trim()||'Unknown creator':creator?.name||'Unknown creator';
 }
 
 export function blankZero(value){

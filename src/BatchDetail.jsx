@@ -37,7 +37,7 @@ export default function BatchDetail({batch,by,focusUpdate,onBack,onEdit,onAction
       <div><span>Expected yield</span><strong>{num(batch.expectedYield).toFixed(1)} mL</strong></div>
       <div><span>Expected ready</span><strong>{formatDay(view.overall.expectedReadyDate)}</strong></div>
       <div><span>Raw material cost</span><strong>{money(batch.calculation?.ingredientCost)}</strong></div>
-      <div><span>Created by</span><strong>{creatorLabel(batch.createdBy)}</strong></div>
+      <div><span>Created by</span><strong>{batch.createdBy?creatorLabel(batch.createdBy):(by||'Unknown creator')}</strong></div>
     </div>
     {batch.notes&&<p className="bd-notes">{batch.notes}</p>}
     <AgingBars view={view}/>
