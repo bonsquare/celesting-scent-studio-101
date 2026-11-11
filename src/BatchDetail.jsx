@@ -4,6 +4,7 @@ import {money,num} from './logic';
 import {localDate,batchStatuses} from './production';
 import {agingView,applyAgingAction} from './aging';
 import AgingBars,{formatDay,statusClass} from './AgingBars';
+import {creatorLabel} from './formulaCreator';
 
 const stamp=iso=>{const date=new Date(iso);return Number.isNaN(date.getTime())?iso:`${date.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})} @ ${date.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})}`};
 
@@ -36,7 +37,7 @@ export default function BatchDetail({batch,by,focusUpdate,onBack,onEdit,onAction
       <div><span>Expected yield</span><strong>{num(batch.expectedYield).toFixed(1)} mL</strong></div>
       <div><span>Expected ready</span><strong>{formatDay(view.overall.expectedReadyDate)}</strong></div>
       <div><span>Raw material cost</span><strong>{money(batch.calculation?.ingredientCost)}</strong></div>
-      <div><span>Created by</span><strong>{batch.createdBy||'—'}</strong></div>
+      <div><span>Created by</span><strong>{creatorLabel(batch.createdBy)}</strong></div>
     </div>
     {batch.notes&&<p className="bd-notes">{batch.notes}</p>}
     <AgingBars view={view}/>
