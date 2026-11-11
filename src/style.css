@@ -1305,17 +1305,17 @@ button.banner-chip:focus-visible{outline:2px solid #fff;outline-offset:2px}
 #root .saved-formula-name>div>strong>*:not(.formula-name-text){flex:none}
 
 /* Costing process stepper */
-#root .costing-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:12px 6px 10px;border:1px solid var(--t-line);border-radius:14px;background:var(--t-card);margin:0 0 4px}
+#root .costing-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:15px 10px 12px;border:1px solid var(--t-line);border-radius:14px;background:var(--t-card);margin:0 0 4px}
 #root .cs-step{position:relative;display:grid;justify-items:center;gap:5px;padding:0 2px;border:0;background:transparent;cursor:pointer;font:inherit;height:auto;min-height:0;min-width:0}
 #root .cs-step:disabled{cursor:default;opacity:.55}
-#root .cs-step::before{content:"";position:absolute;top:14px;right:50%;width:100%;height:2px;background:var(--t-tint);z-index:0}
+#root .cs-step::before{content:"";position:absolute;top:16px;right:50%;width:100%;height:2px;background:var(--t-tint);z-index:0}
 #root .cs-step:first-child::before{display:none}
 #root .cs-step.cs-done::before,#root .cs-step.cs-active::before{background:var(--t-brand)}
 #root .cs-step.cs-history:not(.cs-done)::before{background:repeating-linear-gradient(90deg,var(--t-line) 0 4px,transparent 4px 8px)}
-#root .cs-dot{position:relative;z-index:1;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--t-card);border:2px solid var(--t-line);color:var(--t-muted);font-size:12px;font-weight:800}
+#root .cs-dot{position:relative;z-index:1;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--t-card);border:2px solid var(--t-line);color:var(--t-muted);font-size:12px;font-weight:800}
 #root .cs-active .cs-dot{background:var(--t-brand);border-color:var(--t-brand);color:#fff;box-shadow:0 0 0 4px var(--t-tint)}
 #root .cs-done .cs-dot{background:#2fb673;border-color:#2fb673;color:#fff}
-#root .cs-label{font-size:11.5px;font-weight:700;color:var(--t-ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+#root .cs-label{font-size:12px;font-weight:750;color:var(--t-ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 #root .cs-active .cs-label{color:var(--t-brand)}
 #root .cs-step:not(:disabled):hover .cs-dot{border-color:var(--t-brand)}
 #root .cost-sheet-section-title{display:flex;align-items:center;gap:8px}
