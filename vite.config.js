@@ -10,7 +10,7 @@ export default defineConfig({build:{rollupOptions:{output:{manualChunks(id){
   if(id.includes('lucide-react'))return 'icons';
   if(/[/\\](react|react-dom|scheduler)[/\\]/.test(id))return 'react';
 }}}},plugins:[react(),VitePWA({
-  registerType:'autoUpdate',
+  registerType:'prompt',
   includeAssets:['icon-192.png','icon-512.png','icon-maskable-512.png','apple-touch-icon.png','celestine-logo.jpg'],
   manifest:{
     id:'/',
