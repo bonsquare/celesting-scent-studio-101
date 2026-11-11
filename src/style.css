@@ -1171,14 +1171,14 @@ button.banner-chip:focus-visible{outline:2px solid #fff;outline-offset:2px}
 #root .bf-production-info .bf-material-usage{padding:.5rem;gap:.35rem}
 #root .bf-production-info .bf-material-usage .bf-usage-row{padding:.4rem .5rem}
 #root .bf-usage-concentration{display:flex;align-items:baseline;flex-wrap:wrap;gap:.2rem .5rem;padding:.55rem .7rem;border:1px solid #d8d0fa;border-radius:10px;background:#f6f3ff;color:#5146a7}
-#root .bf-usage-concentration{border:2px solid var(--t-brand);background:linear-gradient(135deg,#eef4ff,#f5f2ff);box-shadow:0 4px 14px #356fe326}
+#root .bf-usage-concentration{border:2px solid var(--t-brand);background:linear-gradient(135deg,#eef4ff,#f5f2ff);box-shadow:0 4px 14px #356fe326;padding:.8rem .9rem;gap:.35rem .8rem}
 #root .bf-usage-concentration>span{font-size:.73rem;font-weight:800}
 #root .bf-usage-concentration strong{margin-left:auto;font-size:.88rem;font-variant-numeric:tabular-nums}
 #root .bf-usage-concentration small{flex-basis:100%;font-size:.65rem;color:var(--t-muted)}
 #root .bf-usage-concentration>div{display:grid;gap:.12rem;min-width:0;flex:1}
 #root .bf-usage-concentration>div+div{padding-left:.7rem;border-left:1px solid #d8d0fa}
-#root .bf-usage-concentration>div span{font-size:.68rem;font-weight:800}
-#root .bf-usage-concentration>div strong{margin:0;font-size:.88rem}
+#root .bf-usage-concentration>div span{font-size:.72rem;font-weight:850}
+#root .bf-usage-concentration>div strong{margin:0;font-size:1.05rem}
 #root .bf-usage-concentration>div small{flex-basis:auto}
 #root .bf-material-usage .bf-usage-row>span strong{font-size:.75rem;line-height:1.25;overflow-wrap:anywhere}
 #root .bf-material-usage .bf-usage-row>span small{line-height:1.3}
