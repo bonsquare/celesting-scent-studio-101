@@ -22,7 +22,7 @@ function FormulaDetails({formula,data,referenceVolume}){
 
 function UsageRow({row,planned,editing,onChange,onToggle}){
   return <div className="bf-usage-row">
-    <div className="bf-usage-name"><strong>{row.name}</strong><small>{num(planned?.percentage).toFixed(2)}% of formula</small></div>
+    <div className="bf-usage-name"><strong>{row.name}</strong><small>{num(planned?.percentage).toFixed(2)}% of formula{row.density>0&&` · Density ${num(row.density).toFixed(2)} g/mL`}</small></div>
     <div className="bf-usage-amount"><input aria-label={`Quantity used for ${row.name} in ${row.unit}`} readOnly={!editing} type="number" min="0" step="any" value={row.quantity} onChange={event=>onChange(event.target.value)}/><span>{row.unit}</span></div>
     <button type="button" className="bf-usage-edit" aria-label={`${editing?'Save':'Edit'} quantity for ${row.name}`} onClick={event=>onToggle(row.materialId,event.currentTarget)}>{editing?<Check size={16}/>:<Pencil size={16}/>}</button>
     <small className="bf-usage-planned">Planned {num(planned?.quantity).toFixed(2)} {row.unit}</small>
@@ -63,9 +63,9 @@ export default function BatchForm({data,batch,onSave,onCancel}){
   const oilPercentage=(formula?.ingredients||[]).filter(row=>data.ingredients.find(item=>item.id===row.materialId)?.category==='Fragrance Oil').reduce((sum,row)=>sum+num(row.percentage),0);
   const oilVolume=targetVolume*oilPercentage/100;
   const plannedCalculation=formula?calculate({...formula,nominalVolume:targetVolume||referenceVolume},data):null;
-  const plannedUsage=(plannedCalculation?.rows||[]).map(row=>({materialId:row.materialId,name:row.name,unit:materialUnit,percentage:num(row.percentage),quantity:Number((materialUnit==='g'?num(row.grams):num(row.ml)).toFixed(2))}));
+  const plannedUsage=(plannedCalculation?.rows||[]).map(row=>({materialId:row.materialId,name:row.name,unit:materialUnit,density:num(row.density),percentage:num(row.percentage),quantity:Number((materialUnit==='g'?num(row.grams):num(row.ml)).toFixed(2))}));
   const oilGrams=(plannedCalculation?.rows||[]).filter(row=>data.ingredients.find(item=>item.id===row.materialId)?.category==='Fragrance Oil').reduce((sum,row)=>sum+num(row.grams),0);
-  const usage=f.actualMaterialUsage?.length?f.actualMaterialUsage:plannedUsage;
+  const usage=(f.actualMaterialUsage?.length?f.actualMaterialUsage:plannedUsage).map(row=>({...row,density:num(row.density)||num(data.ingredients.find(item=>item.id===row.materialId)?.density)}));
   const oilUsage=usage.filter(row=>data.ingredients.find(item=>item.id===row.materialId)?.category==='Fragrance Oil');
   const otherUsage=usage.filter(row=>!oilUsage.includes(row));
   const toggleUsageEdit=(id,button)=>{const wasEditing=editingUsage.has(id);setEditingUsage(current=>{const next=new Set(current);if(wasEditing)next.delete(id);else next.add(id);return next});if(!wasEditing)requestAnimationFrame(()=>button.parentElement?.querySelector('input')?.focus())};
