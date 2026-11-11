@@ -77,7 +77,7 @@ export default function BatchForm({data,batch,onSave,onCancel}){
     <nav className="bf-steps" aria-label="Production process">{['Batch Planning','Materials','Aging & Review'].map((label,index)=><button type="button" key={label} className={`bf-step${step===index?' active':index<step?' done':''}`} aria-current={step===index?'step':undefined} onClick={()=>setStep(index)}><span className="bf-step-dot">{index<step?<Check size={14} strokeWidth={3}/>:index+1}</span><span>{label}</span></button>)}</nav>
     {step===0&&<details className="bf-group bf-production-info" open><summary><h3>Production information</h3><span className="bf-sum"><strong>{name||'No formula chosen'}</strong><small>{formatDay(f.date)} · {targetVolume.toFixed(2)} mL planned</small></span></summary>
       <div className="bf-grid">
-        <div className="bf-wide bf-auto-number"><span>Batch number</span><strong>{editing?batch.batchNumber:'Assigned when saved'}</strong></div>
+        {editing&&<div className="bf-wide bf-auto-number"><span>Batch number</span><strong>{batch.batchNumber}</strong></div>}
         <div className="bf-wide bf-section-label">Scent and formula</div>
         {editing
           ?<label className="bf-wide"><span>Scent</span><input value={batch.name} disabled/></label>
