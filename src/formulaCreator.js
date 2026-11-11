@@ -4,7 +4,7 @@ export function withFormulaCreator(formula,user){
 }
 
 export function creatorLabel(creator){
- return [creator?.name,creator?.email].filter(Boolean).join(' · ')||'Unknown creator';
+ return creator?.name||'Unknown creator';
 }
 
 export function blankZero(value){
