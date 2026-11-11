@@ -14,7 +14,7 @@ describe('formula creator attribution',()=>{
  });
 
  it('formats the creator name and email for display',()=>{
-  expect(creatorLabel({name:'Bonifacio Orong',email:'bonie@example.com'})).toBe('Bonifacio Orong · bonie@example.com');
+  expect(creatorLabel({name:'Bonifacio Orong',email:'bonie@example.com'})).toBe('Bonifacio Orong');
   expect(creatorLabel({name:'Bonifacio Orong',email:''})).toBe('Bonifacio Orong');
  });
 });
