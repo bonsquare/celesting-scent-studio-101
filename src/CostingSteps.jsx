@@ -7,7 +7,7 @@ export default function CostingSteps({tab,ready,hasSavedPrices=false,onChange}){
   const active=steps.findIndex(([id])=>id===tab);
   return <nav className="costing-steps" aria-label="Costing steps">
     {steps.map(([id,label,hint],index)=>{
-      const isHistory=id==='history',done=ready&&(isHistory?hasSavedPrices:index<active&&active<=3);
+      const isHistory=id==='history',done=ready&&(isHistory?hasSavedPrices&&active>=3:index<active&&active<=3);
       const state=!ready?'locked':done?'done':index===active?'active':'todo';
       return <button type="button" key={id} disabled={!ready} title={hint} aria-current={index===active?'step':undefined} className={`cs-step cs-${state}${isHistory?' cs-history':''}`} onClick={()=>onChange(id)}>
         <span className="cs-dot">{done?<Check size={14} strokeWidth={3}/>:isHistory?<History size={14}/>:index+1}</span>
