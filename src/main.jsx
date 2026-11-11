@@ -67,9 +67,12 @@ function App({user,isMaster=false}){const[data,setData]=useState(null),[page,set
  if(!data)return <div className="loading"><img className="loading-logo" src="/celestine-logo.jpg" alt="Celestine &amp; Co." width="84" height="84"/><span>Loading Celestine &amp; Co. Perfume Studio…</span></div>;
  const activeBatches=(data.productions||data.batches).filter(batch=>!batch.archived);
  const totals=activeBatches.reduce((a,b)=>{
-  const bottles=num(b.bottles)||num(b.pricingSnapshot?.tiers?.[0]?.result?.quantity)||num(b.pricingSnapshot?.quantity);
-  const cost=num(b.productionCost)||num(b.costingSnapshot?.totalProductionCost);
-  const profit=num(b.projectedGrossProfit)||num(b.pricingSnapshot?.tiers?.[0]?.result?.projectedProfit);
+  const costing=(data.costings||[]).find(item=>item.productionId===b.id);
+  const saved=costing?.draft?.pricingHistory?.at(-1)||costing?.pricingHistory?.at(-1);
+  const retail=saved?.tiers?.[0]?.result;
+  const bottles=num(saved?.quantity)||num(b.bottles)||num(b.pricingSnapshot?.tiers?.[0]?.result?.quantity)||num(b.pricingSnapshot?.quantity);
+  const cost=num(saved?.costPerBottle)*bottles||num(b.productionCost)||num(b.costingSnapshot?.totalProductionCost);
+  const profit=num(retail?.projectedProfit)||num(b.projectedGrossProfit)||num(b.pricingSnapshot?.tiers?.[0]?.result?.projectedProfit);
   return {bottles:a.bottles+bottles,cost:a.cost+cost,profit:a.profit+profit};
  },{bottles:0,cost:0,profit:0});
  const profileName=user?.user_metadata?.full_name||user?.user_metadata?.name||data.settings?.profile?.full_name||user?.email?.split('@')[0]||'Local workspace';const profilePhoto=user?.user_metadata?.avatar_url||user?.user_metadata?.picture||data.settings?.profile?.avatar_url;const profileInitial=profileName.trim().charAt(0).toUpperCase()||'C';
