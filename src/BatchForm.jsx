@@ -6,16 +6,17 @@ import {formulaOutputVolume,measurementUnit} from './production';
 import {buildSchedule,scheduleChanged,scheduleOf,validateBatch} from './aging';
 import {formatDay,formatRange} from './AgingBars';
 
-function FormulaDetails({formula,data,referenceVolume,targetVolume}){
+function FormulaDetails({formula,data,referenceVolume,targetVolume,targetUnit}){
   const rows=(formula.ingredients||[]).map(row=>({...row,material:data.ingredients.find(item=>item.id===row.materialId)}));
   const oil=rows.filter(row=>row.material?.category==='Fragrance Oil');
   const other=rows.filter(row=>row.material?.category!=='Fragrance Oil');
   const inspiredBy=formula.inspiredBy||oil.find(row=>row.material?.inspiredBy)?.material.inspiredBy;
   const oilPercentage=oil.reduce((sum,row)=>sum+num(row.percentage),0);
+  const displayUnit=targetUnit==='g'?'g':'mL',referenceAmount=displayUnit==='g'?calculate(formula,data).grams:referenceVolume;
   const ingredient=row=><div className="bf-formula-ingredient" key={row.id}><span>{row.material?.name||row.name||'Material'}</span><strong>{num(row.percentage).toFixed(2)}%</strong></div>;
   return <div className="bf-wide bf-formula-details" aria-label="Selected formula details">
     <div className="bf-formula-details-head"><div><small>SELECTED FORMULA</small><strong>{formula.name}</strong>{inspiredBy&&<span className="bf-formula-inspired">Inspired by {inspiredBy}</span>}</div>{formula.code&&<span>{formula.code}</span>}</div>
-    <div className="bf-formula-facts"><div><strong>{num(targetVolume).toFixed(2)} <em>mL</em></strong><span>Target volume to make</span></div><div><strong>{num(referenceVolume).toFixed(2)} <em>mL</em></strong><span>Formula reference</span></div><div><strong>{oilPercentage.toFixed(2)}<em>%</em></strong><span>Fragrance oil</span></div><div><strong>{rows.length}</strong><span>Materials</span></div></div>
+    <div className="bf-formula-facts"><div><strong>{num(targetVolume).toFixed(2)} <em>{displayUnit}</em></strong><span>Target amount to make</span></div><div><strong>{num(referenceAmount).toFixed(2)} <em>{displayUnit}</em></strong><span>Formula reference</span></div><div><strong>{oilPercentage.toFixed(2)}<em>%</em></strong><span>Fragrance oil</span></div><div><strong>{rows.length}</strong><span>Materials</span></div></div>
     <details className="bf-formula-ingredient-toggle"><summary>View ingredients <span>{rows.length}</span></summary><div className="bf-formula-ingredient-groups"><section><h4>Fragrance oil</h4>{oil.map(ingredient)}</section><section><h4>Other raw materials</h4>{other.map(ingredient)}</section></div></details>
   </div>;
 }
@@ -84,7 +85,7 @@ export default function BatchForm({data,batch,onSave,onCancel}){
           :<>
             <label className="bf-wide"><span>Find a scent</span><input type="search" placeholder="Search scents" value={search} onChange={event=>setSearch(event.target.value)}/></label>
             <label className="bf-wide bf-scent-select"><span>Selected formula</span><select value={f.formulaId} onChange={event=>pickScent(event.target.value)}>{scents.length?scents.map(item=><option key={item.id} value={item.id}>{item.name||'Untitled'}{item.code?` (${item.code})`:''}</option>):<option value="">No matching scent</option>}</select></label>
-            {formula&&<FormulaDetails formula={formula} data={data} referenceVolume={referenceVolume} targetVolume={targetVolume}/>}
+            {formula&&<FormulaDetails formula={formula} data={data} referenceVolume={referenceVolume} targetVolume={targetVolume} targetUnit={f.targetUnit}/>}
           </>}
         <div className="bf-wide bf-section-label">Batch plan</div><label><span>Production date</span><input type="date" value={f.date} onChange={event=>set({date:event.target.value})}/></label>
 <label className="bf-basis-field"><span>Calculation basis</span><select value={f.targetBasis} onChange={event=>changeBasis(event.target.value)}><option value="output">Volume to Make</option><option value="oil">By Fragrance Oil</option></select></label>
