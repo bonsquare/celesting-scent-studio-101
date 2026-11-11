@@ -51,7 +51,7 @@ function FormulaEditor({initial,data,onSave,onClose}){
     const extra={},row=draft.materials.find(r=>r.id===id);
     if(row?.role==='oil'&&patch.materialId!==undefined&&patch.materialId!==row.materialId){
       const next=data.ingredients.find(m=>m.id===patch.materialId),prev=data.ingredients.find(m=>m.id===row.materialId);
-      const inspired=m=>m?.inspiredBy||'',scent=m=>m?.scentName||m?.name||'';
+      const inspired=m=>m?.inspiredBy||m?.name||'',scent=m=>m?.scentName||m?.name||'';
       if(!draft.inspiredBy||draft.inspiredBy===inspired(prev))extra.inspiredBy=inspired(next);
       if(scent(next)&&(!draft.name.trim()||draft.name===scent(prev)))extra.name=scent(next);
     }
