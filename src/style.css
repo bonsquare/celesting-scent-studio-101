@@ -1061,7 +1061,7 @@ button.banner-chip:focus-visible{outline:2px solid #fff;outline-offset:2px}
 /* Workspace panels share the Create New Formula visual language. */
 #root .batch-form,#root .batch-detail,#root .formula-library,#root .costing-setup.card,#root .cost-sheet,#root .bottling-pricing,#root .costing-steps{background:var(--t-card);border:1px solid var(--t-line);box-shadow:0 8px 24px #2336700d;backdrop-filter:none;-webkit-backdrop-filter:none}
 #root .costing-steps{width:100%;max-width:860px;margin-inline:auto;border-radius:18px}
-#root .bf-formula-facts{grid-template-columns:repeat(4,minmax(0,1fr))}
+#root .bf-formula-facts{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media(max-width:600px){#root .bf-formula-facts{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:.5rem}}
 #root .batch-form h2,#root .batch-form h3,#root .costing-setup h2,#root .cost-sheet h2,#root .bottling-pricing h2{color:var(--t-ink2)}
 #root .batch-form .card-head{align-items:center}
