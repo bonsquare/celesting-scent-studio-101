@@ -41,14 +41,15 @@ describe('themeFromSearch',()=>{
 const at=(hour,minute=0)=>new Date(2026,10,5,hour,minute);
 
 describe('timeOfDay',()=>{
-  it('is morning from 1:00 through the noon hour',()=>{
+  it('is morning from 1:00 through 11:59',()=>{
     expect(timeOfDay(at(1,0))).toBe('morning');
-    expect(timeOfDay(at(12,59))).toBe('morning');
+    expect(timeOfDay(at(12,0))).toBe('afternoon');
     expect(timeOfDay(at(5,0))).toBe('morning');
     expect(timeOfDay(at(8,30))).toBe('morning');
     expect(timeOfDay(at(11,59))).toBe('morning');
   });
-  it('is afternoon from 13:00 to 17:59',()=>{
+  it('is afternoon from 12:00 to 17:59',()=>{
+    expect(timeOfDay(at(12,0))).toBe('afternoon');
     expect(timeOfDay(at(13,0))).toBe('afternoon');
     expect(timeOfDay(at(15,45))).toBe('afternoon');
     expect(timeOfDay(at(17,59))).toBe('afternoon');
@@ -62,8 +63,8 @@ describe('timeOfDay',()=>{
   it('covers all 24 hours with exactly one scene each',()=>{
     const scenes=Array.from({length:24},(_,hour)=>timeOfDay(at(hour)));
     expect(scenes.every(scene=>scene in greetings)).toBe(true);
-    expect(scenes.filter(scene=>scene==='morning')).toHaveLength(12);
-    expect(scenes.filter(scene=>scene==='afternoon')).toHaveLength(5);
+    expect(scenes.filter(scene=>scene==='morning')).toHaveLength(11);
+    expect(scenes.filter(scene=>scene==='afternoon')).toHaveLength(6);
     expect(scenes.filter(scene=>scene==='evening')).toHaveLength(7);
   });
   it('has a greeting for every scene',()=>{

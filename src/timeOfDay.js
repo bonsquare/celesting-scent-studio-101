@@ -1,8 +1,8 @@
-// Morning 01:00–12:59, afternoon 13:00–17:59, evening 18:00–00:59.
+// Morning 01:00–11:59, afternoon 12:00–17:59, evening 18:00–00:59.
 export function timeOfDay(date=new Date()){
   const hour=date.getHours();
-  if(hour>=1&&hour<13)return 'morning';
-  if(hour>=13&&hour<18)return 'afternoon';
+  if(hour>=1&&hour<12)return 'morning';
+  if(hour>=12&&hour<18)return 'afternoon';
   return 'evening';
 }
 
